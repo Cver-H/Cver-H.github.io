@@ -536,10 +536,10 @@ body {
 /* 歌词面板 */
 .lrc-container {
     position: absolute;
-    bottom: 65px;
+    bottom: 66px;
     left: 0;
     width: 100%;
-    min-width: 200px;
+    min-width: 270px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 15px;
@@ -547,7 +547,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.3);
     text-align: center;
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
     transition: all 0.4s ease;
     pointer-events: none;
 }
@@ -555,8 +555,100 @@ body {
 .lrc-container.active { opacity: 1; transform: translateY(0); }
 
 #lrc-text {
-    font-size: 0.8rem;
-    color: #2c3e50;
+    font-size: 0.75rem;
+    color: #d5e7ff;
     margin: 0;
     transition: opacity 0.2s;
+}
+
+/* 1. 专门给引导语用的手写体类 */
+.lrc-guide-style {
+    font-family: '1', cursive !important;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+/* 2. 专门给正式歌词用的普通字体类 */
+.lrc-content-style {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif !important;
+    font-size: 0.9rem;
+    letter-spacing: 0;
+    opacity: 1;
+}
+
+/* 歌单面板样式 */
+.playlist-container {
+    position: absolute;
+    bottom: 65px; /* 和歌词面板位置一致 */
+    left: 0;
+    width: 100%;
+    min-width: 220px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+    pointer-events: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 2001;
+}
+
+/* 激活状态 */
+.playlist-container.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+#playlist-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#playlist-ul li {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    color: #2c3e50;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#playlist-ul li:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#playlist-ul li.active {
+    color: #73d0fc;
+    background: rgba(115, 208, 252, 0.1);
+    font-weight: bold;
+}
+
+#song-artist {
+    font-family: '1', cursive; /* 使用你之前引入的手写字体 */
+    font-size: 0.9rem;         /* 比歌名稍微小一点点 */
+    color: #2c3e50;            /* 颜色可以跟歌名一致 */
+    opacity: 0.95;              /* 调高透明度，增加层次感 */
+    margin-left: 10px;         /* 跟歌名保持距离 */
+    vertical-align: middle;    /* 确保跟歌名在一条线上 */
+    
+    /* 增加平滑度 */
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 1px;
+}
+
+/* 歌单按钮激活样式 */
+#list-toggle.active {
+    opacity: 1 !important;
+    color: #73d0fc;
 }
