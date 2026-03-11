@@ -102,8 +102,10 @@
     </div>
 
     <div id="lrc-panel" class="lrc-container">
-        <p id="lrc-text" class="lrc-guide-style">点擊唱片開啟音樂之旅</p>
+        <p id="lrc-text" class="lrc-guide-style">点击唱片开启音乐之旅</p>
     </div>
+
+    
 </div>
 
 </div>    
@@ -377,7 +379,7 @@ const playlist = [
         title: "Farewell, Neverland",
         artist: "TXT",
         type:"外语",    
-        cover: "images/covers/neverland.jpg", // 专辑图路径    
+        cover: "images/cover/txt.jpg", // 专辑图路径    
         src: "music/TOMORROW X TOGETHER (투모로우바이투게더) - 네버랜드를 떠나며 (逃离梦幻岛).mp3",
         lrc: `[00:00.00]Farewell, Neverland--Tomorrow X Together 
 [00:11.95]Neverland my love 이젠 안녕
@@ -435,7 +437,7 @@ const playlist = [
     
     {
         title: "沉寂深海",
-        artist: "冒海飛",
+        artist: "冒海飞",
         type:"音乐剧",
         cover: "images/cover/阴天.jpg",
         src: "music/沉寂深海.mp3",
@@ -472,9 +474,10 @@ const playlist = [
 [02:08.85]我沉入海底
 `
     },
-    { title:"腐爛",
-      artist:"冒海飛/王培杰 等",
+    { title:"腐烂",
+      artist:"冒海飞/王培杰",
       type:"音乐剧",
+      cover: "images/cover/嫌疑人.jpg",
       src: "music/腐烂.mp3",
       lrc:`[00:00.00]腐烂--嫌疑人X的献身
 [00:10.63]石神：
@@ -546,9 +549,10 @@ const playlist = [
 [04:17.02]将会在某一刻毁灭你
 
     `},
-      { title:"解：設",
-      artist:"王培杰/冒海飛",
+      { title:"解:设",
+      artist:"王培杰/冒海飞",
       type:"音乐剧",
+      cover: "images/cover/嫌疑人.jpg",
       src: "music/解设.mp3",
       lrc:`[00:00.00]解：设--王培杰/冒海飞
 [00:09.91]石神:
@@ -773,11 +777,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <footer class="site-footer">
     <div class="footer-content">
-      本站已運行：<span id="runtime"></span>
+      本站已运行：<span id="runtime"></span>
+
+      <span id="busuanzi_container_site_pv" style="display:none">
+        <span style="margin: 0 8px; opacity: 0.5;">|</span>
+        总访问量 <span id="busuanzi_value_site_pv"></span> 次
+      </span>
+      <span id="busuanzi_container_site_uv" style="display:none">
+        <span style="margin: 0 8px; opacity: 0.5;">|</span>
+        访客数 <span id="busuanzi_value_site_uv"></span> 人
+      </span>
     </div>
   </footer>
-
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
   <script>
+    
     function showRuntime() {
       var startDate = new Date("2025/12/19 10:47:09");
       var now = new Date();

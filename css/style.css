@@ -123,6 +123,28 @@ body {
   font-style: normal;
 }
 
+@font-face {
+  font-family: '2';
+  src: url('../fonts/momo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '3';
+  src: url('../fonts/butter.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '4';
+  src: url('../fonts/汇文明朝体.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 /* 文章毛玻璃卡片 */
 .glass-card {
   position:fixed;
@@ -266,7 +288,7 @@ body {
 /* 底部固定条 */
 .site-footer {
   position: fixed;
-  bottom: 10px;      /* 稍微往上提一点，纯文字贴边不好看 */
+  bottom: 3px;      /* 稍微往上提一点，纯文字贴边不好看 */
   width: 100%;
   height: auto;      /* 高度自适应 */
   background: none;  /* 彻底去掉黑色背景 */
@@ -279,7 +301,7 @@ body {
 }
 
 .footer-content {
-  font-family: '1', cursive;
+  font-family: '3', cursive;
   color: #eaf5ff;    /* 颜色建议和卡片文字一致，或者用 white */
   font-size: 20px;
   pointer-events: none;
@@ -478,12 +500,29 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
+    width: 100%;
+    /* 如果两边还是对不准，可以加一个固定的行高 */
+    line-height: 1.2;
 }
 
 .song-name {
-    font-family: '1', cursive; /* 匹配你的手写字体 */
-    font-size: 0.85rem;
+    font-family: '4', cursive; /* 匹配你的手写字体 */
+    font-size: 0.8rem;
+    margin-right: -8px;
     color: #2c3e50;
+}
+
+/* 左边歌名容器 */
+.song-name-wrapper { 
+    display: flex;
+    align-items: center; /* 确保歌名和横杠对齐 */
+}
+
+/* 右边按钮区域（歌单、词） */
+.right-controls {
+    display: flex;
+    align-items: center; /* 确保两个按钮对齐 */
+    gap: 15px;           /* 按钮之间的间距 */
 }
 
 #lrc-toggle {
@@ -493,6 +532,12 @@ body {
     padding: 2px 5px;
     border-radius: 4px;
     transition: all 0.3s;
+}
+
+/* 如果右边显得太高了，往下拉一点（1px-2px） */
+#lrc-toggle, #list-toggle {
+    position: relative;
+    top: 1px; 
 }
 
 #lrc-toggle.active { opacity: 1; color: #73d0fc; font-weight: bold; }
@@ -536,14 +581,14 @@ body {
 /* 歌词面板 */
 .lrc-container {
     position: absolute;
-    bottom: 66px;
+    bottom: 67px;
     left: 0;
     width: 100%;
     min-width: 270px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 15px;
-    padding: 12px;
+    padding: 10px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     text-align: center;
     opacity: 0;
@@ -555,7 +600,7 @@ body {
 .lrc-container.active { opacity: 1; transform: translateY(0); }
 
 #lrc-text {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: #d5e7ff;
     margin: 0;
     transition: opacity 0.2s;
@@ -563,24 +608,25 @@ body {
 
 /* 1. 专门给引导语用的手写体类 */
 .lrc-guide-style {
-    font-family: '1', cursive !important;
-    font-size: 1.1rem;
+    font-family: '2', cursive !important;
+    font-size: 1.3rem;
     letter-spacing: 2px;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 /* 2. 专门给正式歌词用的普通字体类 */
 .lrc-content-style {
-    font-family: "Microsoft YaHei", "PingFang SC", sans-serif !important;
-    font-size: 0.9rem;
+    font-family: '4', cursive !important;
+    font-size: 2rem;
     letter-spacing: 0;
     opacity: 1;
 }
 
 /* 歌单面板样式 */
 .playlist-container {
+  font-family: '4';
     position: absolute;
-    bottom: 65px; /* 和歌词面板位置一致 */
+    bottom: 67px; /* 和歌词面板位置一致 */
     left: 0;
     width: 100%;
     min-width: 220px;
@@ -635,11 +681,11 @@ body {
 }
 
 #song-artist {
-    font-family: '1', cursive; /* 使用你之前引入的手写字体 */
-    font-size: 0.9rem;         /* 比歌名稍微小一点点 */
+    font-family: '4', cursive; /* 使用你之前引入的手写字体 */
+    font-size: 0.75rem;         /* 比歌名稍微小一点点 */
     color: #2c3e50;            /* 颜色可以跟歌名一致 */
     opacity: 0.95;              /* 调高透明度，增加层次感 */
-    margin-left: 10px;         /* 跟歌名保持距离 */
+    margin-left: 2px;         /* 跟歌名保持距离 */
     vertical-align: middle;    /* 确保跟歌名在一条线上 */
     
     /* 增加平滑度 */
@@ -652,3 +698,4 @@ body {
     opacity: 1 !important;
     color: #73d0fc;
 }
+
