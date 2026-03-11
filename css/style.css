@@ -49,7 +49,7 @@ body {
   position: fixed;
   top: 120px;
   left:50%;/* 先到页面正中间 */
-  margin-left: 235px; /* 通过左边距往右推，这样它永远离中心卡片固定距离 */
+  margin-left: 230px; /* 通过左边距往右推，这样它永远离中心卡片固定距离 */
   right: auto; /* 取消之前的 right 定位 */
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(20px);
@@ -332,33 +332,26 @@ body {
 }
 
 .calendar-card {
-    position: fixed;
-    top: 305px; /* 放在时钟下方 */
-    left:50%; 
-    margin-left: 230px; /* 调整这个数值，直到它出现在你满意的固定位置 */
-    right: auto;
-    /* --- 核心修改：缩放尺寸 --- */
-    /* 0.85 代表缩小到原来的 85%，你可以根据感觉在 0.7 到 0.9 之间微调 */
-    transform: scale(0.93); 
+    position: fixed !important;
+    top: 305px;
     
-    /* 确保缩放时，参考点固定在顶部中心，这样它在垂直方向的位置感不会乱跳 */
-    transform-origin: top center; 
-    /* ------------------------- */
-    width: 380px;
-    height:auto;
-    min-height:270px;
+    /* 关键：从中线往右挪 */
+    left: 50% !important;
+    margin-left: 220px !important; /* 调整这个数值，直到它贴合在中间卡片的右边缘 */
 
-    /* 其他毛玻璃样式不变... */
-    background: rgba(255, 255, 255, 0.3); /* 浅色半透明背景 */
+    /* 恢复精致样式 */
+    width: 380px;
+    background: rgba(255, 255, 255, 0.3) !important;
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-radius: 30px;
     padding: 25px 15px;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-    z-index: 1001;
-    overflow: hidden; /* 确保内容不溢出圆角 */
-    color: #666; /* 默认文字颜色 */
+    z-index: 1001 !important;
+    
+    /* 保持你的缩放 */
+    transform: scale(0.93) !important;
+    transform-origin: top center;
 }
 
 /* 日历标题和星期标题 */
@@ -562,7 +555,7 @@ body {
     top: 1px; 
 }
 
-#lrc-toggle.active { opacity: 1; color: #73d0fc; font-weight: bold; }
+#lrc-toggle.active { opacity: 1; color: #beffac; font-weight: bold; }
 
 /* 进度条 */
 /* 进度条外层：这是实际的点击区域 */
@@ -593,7 +586,7 @@ body {
 .progress {
     width: 0%;
     height: 2px;           /* 保持纤细 */
-    background: #73d0fc;
+    background: #d5e7ff;
     border-radius: 2px;
     position: relative;
     z-index: 1;
@@ -633,7 +626,6 @@ body {
     font-family: '2', cursive !important;
     font-size: 1.3rem;
     letter-spacing: 2px;
-    opacity: 0.9;
 }
 
 /* 2. 专门给正式歌词用的普通字体类 */
@@ -646,9 +638,9 @@ body {
 
 /* 歌单面板样式 */
 .playlist-container {
-  font-family: '4';
+    font-family: '4';
     position: absolute;
-    bottom: 67px; /* 和歌词面板位置一致 */
+    bottom: 67px; 
     left: 0;
     width: 100%;
     min-width: 220px;
@@ -656,15 +648,52 @@ body {
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-radius: 15px;
-    padding: 10px;
+    padding: 8px; /* 稍微缩小内边距 */
     border: 1px solid rgba(255, 255, 255, 0.3);
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.4s ease;
     pointer-events: none;
-    max-height: 200px;
+
+    /* --- 核心修改：固定两首歌的高度 --- */
+    max-height: 92px; 
     overflow-y: auto;
+    overflow-x: hidden; /* 防止横向抖动 */
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important; /* 重要：把 padding 移到内部，防止标签栏缩进 */
+    
     z-index: 2001;
+
+    /* 针对不同浏览器的滚动条美化 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.825) transparent;
+}
+
+.category-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* 重点：背景色要带点模糊或实色，防止滚动上去的歌词透出来 */
+    background: rgba(255, 255, 255, 0.05); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    /* 样式美化 */
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0; /* 防止标签栏被压缩 */
+}
+
+/* 美化 Chrome/Edge 的滚动条 */
+.playlist-container::-webkit-scrollbar {
+    width: 4px;
+}
+.playlist-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.825);
+    border-radius: 10px;
 }
 
 /* 激活状态 */
@@ -676,29 +705,36 @@ body {
 
 #playlist-ul {
     list-style: none;
-    padding: 0;
+    padding: 5px 8px;
     margin: 0;
 }
 
 #playlist-ul li {
-    padding: 8px 12px;
+    height: 35px;
+    display: flex;
+    align-items: center;
     font-size: 0.75rem;
     color: #2c3e50;
     cursor: pointer;
     border-radius: 8px;
-    transition: 0.2s;
+    transition: all 0.3s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
+    /* 强制每一行高度固定，确保两行正好占满窗口 */
+    height: 35px;
+    display: flex;
+    align-items: center;
 }
 
 #playlist-ul li:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
+    padding-left: 16px; /* 悬停时往右缩进一点，很有灵动感 */
 }
-
 #playlist-ul li.active {
-    color: #73d0fc;
-    background: rgba(115, 208, 252, 0.1);
+    color: #f7f6f6;
+    background: rgba(0, 0, 0, 0.1);
     font-weight: bold;
 }
 
@@ -718,29 +754,31 @@ body {
 /* 歌单按钮激活样式 */
 #list-toggle.active {
     opacity: 1 !important;
-    color: #73d0fc;
+    color: #beffac;
 }
 
-/* 侧边栏容器 */
 .sidebar-wrapper {
-  position: fixed;
-    top: 45.5%;
-    transform: translateY(-50%);
-    left: 190px; /* 改为距离左边固定 20px，保证永远显示 */
-    /* 如果非要在大屏居中对齐，建议删掉 calc，改用以下逻辑 */
-  
-  width: 275px;
-  height: 415px; /* 稍微增加一点高度让呼吸感更强 */
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 35px;
-  padding: 30px 20px; /* 增加左右内边距 */
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-  z-index: 1001;
-  display: flex;
-  flex-direction: column;
+    position: fixed !important;
+    top: 45%;
+    /* 这里的 transform 负责垂直居中，不影响左右 */
+    transform: translateY(-50%) !important; 
+    
+    /* 关键：从中线往左挪，避开中间 1000px 的主内容区 */
+    left: 50% !important;
+    margin-left: -510px !important; /* 如果你的屏幕特别大，可以调成 -750px */
+
+    /* 恢复你的精致样式 */
+    width: 275px;
+    height: 415px;
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 35px;
+    padding: 30px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 1001 !important;
+    display: flex;
+    flex-direction: column;
 }
 
 /* 顶部头像区域 */
@@ -812,4 +850,66 @@ body {
 /* 取消之前可能冲突的 active 样式 */
 .side-link.active {
   font-weight: bold;
+}
+
+/* 外层毛玻璃容器 */
+.center-banner-box {
+    position: fixed;
+    top: -45px; /* 距离顶部的距离 */
+    left: 50%;
+    transform: translateX(-50%); /* 完美居中 */
+    
+    /* 容器尺寸：你可以根据图片比例调整 */
+    width: 380px; 
+    height: 220px;
+    
+    /* 毛玻璃核心 */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    
+    /* 边框与圆角 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px; /* 优雅的圆角 */
+    
+    /* 布局：让图片在内框里居中并留出呼吸感 */
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 图片容器链接 */
+.banner-click-area {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 20px; /* 图片的圆角 */
+    overflow: hidden;
+}
+
+/* 图片本身 */
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 保证图片铺满不拉伸 */
+    transition: transform 0.5s ease;
+}
+
+/* 交互特效 */
+.center-banner-box:hover {
+    transform: translateX(-50%) translateY(5px); /* 悬停微降，增加互动感 */
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.center-banner-box:hover .banner-img {
+    transform: scale(1.05); /* 鼠标移上去图片轻微放大 */
+}
+
+.center-banner-box:active {
+    transform: translateX(-50%) scale(0.98); /* 点击时的下沉感 */
 }

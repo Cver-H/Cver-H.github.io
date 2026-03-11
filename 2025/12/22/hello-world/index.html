@@ -12,6 +12,12 @@
   <main class="main-container">
     <div class="main-wrapper">
 
+  <div class="center-banner-box">
+    <a href="javascript:void(0);" onclick="alert('你点击了图片！')" class="banner-click-area">
+        <img src="/images/bg2.jpg" alt="Center Banner" class="banner-img">
+    </a>
+</div>
+  
   <div class="clock-card">
   <div class="digit-container">
     <div class="digit"><span class="bg">8</span><span class="num" id="h1">0</span></div>
@@ -43,6 +49,21 @@
 </div>
 
 
+  <footer class="site-footer">
+    <div class="footer-content">
+      本站已运行：<span id="runtime"></span>
+
+      <span id="busuanzi_container_site_pv" style="display:none">
+        <span style="margin: 0 8px; opacity: 0.5;">|</span>
+        总访问量 <span id="busuanzi_value_site_pv"></span> 次
+      </span>
+    </div>
+  </footer>
+
+  
+
+</div> 
+
 <div class="calendar-card">
     <div id="calendar-main">
         <div class="calendar-header">
@@ -69,7 +90,6 @@
         </div>
     </div>
 </div>
-
   
 <div class="music-player">
     <div class="album-art" id="music-disk">
@@ -95,7 +115,7 @@
 
     <div id="playlist-panel" class="playlist-container">
       <div class="category-tabs" style="display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-        <span class="tab-item active" data-type="外语" style="cursor:pointer; font-size:0.75rem; color:#73d0fc;">外语</span>
+        <span class="tab-item active" data-type="外语" style="cursor:pointer; font-size:0.75rem; color:#beffac;">外语</span>
         <span class="tab-item" data-type="音乐剧" style="cursor:pointer; font-size:0.75rem; color:#fff; opacity:0.6;">音乐剧</span>
       </div>
         <ul id="playlist-ul"></ul>
@@ -104,21 +124,8 @@
     <div id="lrc-panel" class="lrc-container">
         <p id="lrc-text" class="lrc-guide-style">点击唱片开启音乐之旅</p>
     </div>
-
-    
   </div>
-
-  <footer class="site-footer">
-    <div class="footer-content">
-      本站已运行：<span id="runtime"></span>
-
-      <span id="busuanzi_container_site_pv" style="display:none">
-        <span style="margin: 0 8px; opacity: 0.5;">|</span>
-        总访问量 <span id="busuanzi_value_site_pv"></span> 次
-      </span>
-    </div>
-  </footer>
-
+  
   <nav class="sidebar-wrapper">
   <div class="sidebar-header">
     <img src="/images/avatar.jpg" class="side-avatar">
@@ -128,14 +135,13 @@
   </div>
 
   <div class="side-menu">
-    <a href="/" class="side-link active">作品</a>
-    <a href="/images" class="side-link">图像</a>
+    <a href="/" class="side-link active">作品集</a>
+    <a href="/photos" class="side-link">摄影</a>
     <a href="/write" class="side-link">随写</a>
-    <a href="/repo" class="side-link">Repo</a>
+    <a href="/repo" class="side-link">REPO</a>
+    <a href="/aboutme" class="side-link">关于我</a>
   </div>
   </nav>
-
-</div> 
 
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
@@ -741,7 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 t.style.color = "#fff";
                 t.style.opacity = "0.6";
             });
-            this.style.color = "#73d0fc";
+            this.style.color = "#beffac";
             this.style.opacity = "1";
 
             // 切换数据
