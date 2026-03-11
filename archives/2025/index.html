@@ -715,6 +715,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const playlistUl = document.getElementById('playlist-ul');
     const tabs = document.querySelectorAll('.tab-item');
 
+
+    // 在脚本开头部分添加
+     let currentType = 'all'; // 或者你默认想要显示的分类，比如 '作品'
     // 初始化渲染歌单列表
     function renderPlaylist() {
       // 过滤出当前分类的歌曲
