@@ -375,8 +375,7 @@ document.addEventListener('DOMContentLoaded', renderCalendar);
 
 // 1. 定义歌单数据（在这里添加新歌和歌词）
 const playlist = [
-    {
-        title: "Farewell, Neverland",
+    { title: "Farewell, Neverland",
         type:"外语",    
         cover: "images/cover/txt.jpg", // 专辑图路径    
         src: "music/TOMORROW X TOGETHER (투모로우바이투게더) - 네버랜드를 떠나며 (逃离梦幻岛).mp3",
@@ -434,8 +433,7 @@ const playlist = [
 `
     },
     
-      {
-        title: "Mirror",
+      { title: "Mirror",
         type:"外语",    
         cover: "images/cover/maxi.jpg", // 专辑图路径    
         src: "music/mirror.mp3",
@@ -487,8 +485,7 @@ const playlist = [
 `
     },
 
-    {
-        title: "沉寂深海",
+    { title: "沉寂深海",
         artist: "冒海飞",
         type:"音乐剧",
         cover: "images/cover/阴天.jpg",
@@ -791,9 +788,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 更新逻辑
     audio.ontimeupdate = () => {
-      if (lrcPanel.classList.contains('active') && lyricData.length > 0) {
-    const now = audio.currentTime;
-    let activeLine = lyricData.reduce((prev, curr) => (now >= curr.time ? curr : prev), lyricData[0]);
+      // 1. 更新进度条 (新增这部分)
+        if (audio.duration) {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progressInner.style.width = progressPercent + '%';
+        }
+
+        // 2. 更新歌词 (保持你原有的逻辑)
+        if (lrcPanel.classList.contains('active') && lyricData.length > 0) {
+            const now = audio.currentTime;
+            let activeLine = lyricData.reduce((prev, curr) => (now >= curr.time ? curr : prev), lyricData[0]);
     
     if (lrcText.innerText !== activeLine.text) {
         // --- 核心修改逻辑 ---
