@@ -700,7 +700,7 @@ body {
 
 #song-artist {
     font-family: '4', cursive; /* 使用你之前引入的手写字体 */
-    font-size: 0.75rem;         /* 比歌名稍微小一点点 */
+    font-size: 0.8rem;         /* 比歌名稍微小一点点 */
     color: #2c3e50;            /* 颜色可以跟歌名一致 */
     opacity: 0.95;              /* 调高透明度，增加层次感 */
     margin-left: 2px;         /* 跟歌名保持距离 */
