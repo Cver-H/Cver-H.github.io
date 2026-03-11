@@ -724,7 +724,7 @@ body {
 /* 侧边栏容器 */
 .sidebar-wrapper {
   position: fixed;
-    top: 50%;
+    top: 45.5%;
     transform: translateY(-50%);
     left: 190px; /* 改为距离左边固定 20px，保证永远显示 */
     /* 如果非要在大屏居中对齐，建议删掉 calc，改用以下逻辑 */
