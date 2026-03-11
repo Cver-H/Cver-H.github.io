@@ -162,8 +162,8 @@ body {
   transform: translate(-50%, -50%); /* 往回偏移自身宽高的一半，实现完美居中 */
 
 /* 1. 核心：设定为正方形 */
-  width: 450px;         /* 你可以根据需要调整大小，比如 400px 或 500px */
-  aspect-ratio: 4/3;    /* 强制宽高比为 4:3 */
+  width: 380px;         /* 你可以根据需要调整大小，比如 400px 或 500px */
+  height: 310px;  /* 强制宽高比为 4:3 */
   
   /* 2. 居中对齐设置 */
   display: flex;
@@ -201,8 +201,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center; /* 居中对齐 */
+  justify-content: center;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 /* 头像样式 */
@@ -212,13 +214,13 @@ body {
   border-radius: 50%; /* 圆形 */
   border: 3px solid rgba(255, 255, 255, 0.5);
   object-fit: cover;
-  margin-bottom: 20px;
+  margin-bottom: 0 !important;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.5s ease;
 }
 
 #avatar-container {
-  margin-bottom: 20px;
+  margin-bottom: 5px !important;
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
 }
 
@@ -249,7 +251,14 @@ body {
   font-weight: normal;    /* 手写体通常不建议加粗，保持原汁原味 */
   letter-spacing: 2px;    /* 增加字间距，防止连笔在模糊背景下重叠 */
   text-align: center;
-  margin: 10px 0;
+  /* 关键修改： */
+    margin-top: 0 !important;    /* 消除顶部的间距 */
+    margin-bottom: 5px !important;
+    padding: 0 !important;  
+    padding-bottom: -5px !important;       /* 保持底部的间距，或者根据需要调整 */
+    
+    /* 保持行距不变： */
+    line-height: 1.1;            /* 这个值决定了多行文字间的距离，保持不动 */
   
   /* 让手写线条更平滑 */
   -webkit-font-smoothing: antialiased;
@@ -320,8 +329,15 @@ body {
     position: fixed;
     top: 320px; /* 放在时钟下方 */
     left:50%; 
-    margin-left: 280px; /* 调整这个数值，直到它出现在你满意的固定位置 */
+    margin-left: 265px; /* 调整这个数值，直到它出现在你满意的固定位置 */
     right: auto;
+    /* --- 核心修改：缩放尺寸 --- */
+    /* 0.85 代表缩小到原来的 85%，你可以根据感觉在 0.7 到 0.9 之间微调 */
+    transform: scale(0.9); 
+    
+    /* 确保缩放时，参考点固定在顶部中心，这样它在垂直方向的位置感不会乱跳 */
+    transform-origin: top center; 
+    /* ------------------------- */
     width: 380px;
     height:auto;
     min-height:270px;
