@@ -329,13 +329,13 @@ body {
 
 .calendar-card {
     position: fixed;
-    top: 320px; /* 放在时钟下方 */
+    top: 325px; /* 放在时钟下方 */
     left:50%; 
-    margin-left: 265px; /* 调整这个数值，直到它出现在你满意的固定位置 */
+    margin-left: 270px; /* 调整这个数值，直到它出现在你满意的固定位置 */
     right: auto;
     /* --- 核心修改：缩放尺寸 --- */
     /* 0.85 代表缩小到原来的 85%，你可以根据感觉在 0.7 到 0.9 之间微调 */
-    transform: scale(0.9); 
+    transform: scale(0.93); 
     
     /* 确保缩放时，参考点固定在顶部中心，这样它在垂直方向的位置感不会乱跳 */
     transform-origin: top center; 
