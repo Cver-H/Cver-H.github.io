@@ -168,10 +168,12 @@ body {
   /* 2. 居中对齐设置 */
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 内容垂直居中 */
+  justify-content: flex-start !important; /* 内容垂直居中 */
   align-items: center;     /* 内容水平居中 */
   
-  padding: 20px;
+  padding: 25px;
+  /* 通过这个 padding 来控制头像离卡片顶部的距离，头像就固定了 */
+    padding-top: 27px !important;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   
@@ -252,13 +254,13 @@ body {
   letter-spacing: 2px;    /* 增加字间距，防止连笔在模糊背景下重叠 */
   text-align: center;
   /* 关键修改： */
-    margin-top: 0 !important;    /* 消除顶部的间距 */
-    margin-bottom: 5px !important;
-    padding: 0 !important;  
-    padding-bottom: -5px !important;       /* 保持底部的间距，或者根据需要调整 */
+    margin-top: 15px !important;    /* 消除顶部的间距 */
+    margin-bottom: 0 !important;
+    padding: 0 !important;        /* 保持底部的间距，或者根据需要调整 */
     
     /* 保持行距不变： */
-    line-height: 1.1;            /* 这个值决定了多行文字间的距离，保持不动 */
+    line-height: 0.9;   
+    display: block;         /* 这个值决定了多行文字间的距离，保持不动 */
   
   /* 让手写线条更平滑 */
   -webkit-font-smoothing: antialiased;
