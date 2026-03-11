@@ -49,7 +49,7 @@ body {
   position: fixed;
   top: 120px;
   left:50%;/* 先到页面正中间 */
-  margin-left: 280px; /* 通过左边距往右推，这样它永远离中心卡片固定距离 */
+  margin-left: 235px; /* 通过左边距往右推，这样它永远离中心卡片固定距离 */
   right: auto; /* 取消之前的 right 定位 */
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(20px);
@@ -150,7 +150,7 @@ body {
   position:fixed;
   top: 50%;
   left: 50%;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 28px;
@@ -299,8 +299,9 @@ body {
 /* 底部固定条 */
 .site-footer {
   position: fixed;
-  bottom: 3px;      /* 稍微往上提一点，纯文字贴边不好看 */
-  width: 100%;
+  bottom: 3px;
+  left:0;      /* 稍微往上提一点，纯文字贴边不好看 */
+  width: 100vw;
   height: auto;      /* 高度自适应 */
   background: none;  /* 彻底去掉黑色背景 */
   backdrop-filter: none; /* 去掉模糊 */
@@ -309,6 +310,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  pointer-events: none;
 }
 
 .footer-content {
@@ -317,6 +319,8 @@ body {
   font-size: 20px;
   pointer-events: none;
   letter-spacing: 1px;  
+  display: flex;      /* 内部也开启 flex 确保文字和时间在一条线 */
+  align-items: center;
 }
 
 #runtime {
@@ -329,9 +333,9 @@ body {
 
 .calendar-card {
     position: fixed;
-    top: 325px; /* 放在时钟下方 */
+    top: 305px; /* 放在时钟下方 */
     left:50%; 
-    margin-left: 270px; /* 调整这个数值，直到它出现在你满意的固定位置 */
+    margin-left: 230px; /* 调整这个数值，直到它出现在你满意的固定位置 */
     right: auto;
     /* --- 核心修改：缩放尺寸 --- */
     /* 0.85 代表缩小到原来的 85%，你可以根据感觉在 0.7 到 0.9 之间微调 */
@@ -345,7 +349,7 @@ body {
     min-height:270px;
 
     /* 其他毛玻璃样式不变... */
-    background: rgba(255, 255, 255, 0.4); /* 浅色半透明背景 */
+    background: rgba(255, 255, 255, 0.3); /* 浅色半透明背景 */
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-radius: 30px;
@@ -717,3 +721,94 @@ body {
     color: #73d0fc;
 }
 
+/* 侧边栏容器 */
+.sidebar-wrapper {
+  position: fixed;
+  top: 45%; /* 回归 50% 配合 translate 真正居中 */
+  transform: translateY(-50%);
+  left: calc(50% - 515px); 
+  
+  width: 275px;
+  height: 415px; /* 稍微增加一点高度让呼吸感更强 */
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 35px;
+  padding: 30px 20px; /* 增加左右内边距 */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部头像区域 */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 60px; /* 固定头部高度 */
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 12px;
+  flex-shrink: 0; /* 禁止头部缩放 */
+}
+
+.side-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(255, 255, 255, 0.8);
+  object-fit: cover;
+}
+
+.side-site-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.side-tittle {
+  font-family: '1', cursive;
+  font-size: 1.7rem;
+  color: #2c3e50;
+}
+
+
+/* 菜单列表 */
+.side-menu {
+  width: 100%;
+  flex-grow: 1; /* 占据除去头部外的所有空间 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 关键：让子元素（选项）之间垂直等距分布 */
+}
+
+/* 链接基础样式 */
+.side-link {
+  text-decoration: none;
+  font-family: '4', sans-serif;
+  font-size: 1.1rem; /* 稍微调大字体，更有质感 */
+  color: #2c3e50;
+  width: 100%;
+  padding: 15px 0; /* 增加上下内边距 */
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  border: 1px solid transparent; /* 预留边框位置，防止悬停时抖动 */
+}
+
+/* 悬停 */
+.side-link:hover, 
+.side-link.active {
+  background: rgba(255, 255, 255, 0.3); /* 全透明背景，仅提供极淡的遮罩感 */
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
+  transform: scale(1.02); /* 稍微放大，增加交互反馈 */
+}
+
+/* 取消之前可能冲突的 active 样式 */
+.side-link.active {
+  font-weight: bold;
+}

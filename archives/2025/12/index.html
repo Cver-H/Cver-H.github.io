@@ -106,9 +106,37 @@
     </div>
 
     
-</div>
+  </div>
 
-</div>    
+  <footer class="site-footer">
+    <div class="footer-content">
+      本站已运行：<span id="runtime"></span>
+
+      <span id="busuanzi_container_site_pv" style="display:none">
+        <span style="margin: 0 8px; opacity: 0.5;">|</span>
+        总访问量 <span id="busuanzi_value_site_pv"></span> 次
+      </span>
+    </div>
+  </footer>
+
+  <nav class="sidebar-wrapper">
+  <div class="sidebar-header">
+    <img src="/images/avatar.jpg" class="side-avatar">
+    <div class="side-site-info">
+      <span class="side-tittle">Cver's Blog</span>
+    </div>
+  </div>
+
+  <div class="side-menu">
+    <a href="/" class="side-link active">作品</a>
+    <a href="/images" class="side-link">图像</a>
+    <a href="/write" class="side-link">随写</a>
+    <a href="/repo" class="side-link">Repo</a>
+  </div>
+  </nav>
+
+</div> 
+
 
 <script>
 const wrapper = document.getElementById('avatar-wrapper');
@@ -434,6 +462,7 @@ const playlist = [
     },
     
       { title: "Mirror",
+        artist: "Maximillian",
         type:"外语",    
         cover: "images/cover/maxi.jpg", // 专辑图路径    
         src: "music/mirror.mp3",
@@ -828,36 +857,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderPlaylist(); // 初始渲染
 });
+
+// --- 运行时间逻辑 ---
+function showRuntime() {
+    const runtimeEl = document.getElementById("runtime");
+    if (!runtimeEl) return; // 容错：如果找不到元素就不执行，不报错
+
+    // 建议确认年份：如果是去年刚开站，用 2025；如果是前年，用 2024
+    const startDate = new Date("2025/12/19 10:47:09"); 
+    const now = new Date();
+    const timeDiff = now.getTime() - startDate.getTime();
+
+    if (timeDiff < 0) {
+        runtimeEl.innerHTML = "即将开启...";
+        return;
+    }
+
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+    runtimeEl.innerHTML = days + "天" + 
+        (hours < 10 ? "0" + hours : hours) + "時" + 
+        (minutes < 10 ? "0" + minutes : minutes) + "分 " + 
+        (seconds < 10 ? "0" + seconds : seconds) + "秒";
+}
+
+// 确保页面加载后立即启动
+showRuntime();
+setInterval(showRuntime, 1000);
 </script>
   </main>
 
-  <footer class="site-footer">
-    <div class="footer-content">
-      本站已运行：<span id="runtime"></span>
 
-      <span id="busuanzi_container_site_pv" style="display:none">
-        <span style="margin: 0 8px; opacity: 0.5;">|</span>
-        总访问量 <span id="busuanzi_value_site_pv"></span> 次
-      </span>
-    </div>
-  </footer>
   
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   
   <script>
     
-    function showRuntime() {
-      var startDate = new Date("2025/12/19 10:47:09");
-      var now = new Date();
-      var timeDiff = now.getTime() - startDate.getTime();
-      if (timeDiff < 0) { document.getElementById("runtime").innerHTML = "即将开启..."; return; }
-      var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-      var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-      document.getElementById("runtime").innerHTML = days + "天" + (hours<10?"0"+hours:hours) + "時" + (minutes<10?"0"+minutes:minutes) + "分 " + (seconds<10?"0"+seconds:seconds) + "秒";
-    }
-    showRuntime(); setInterval(showRuntime, 1000);
+
   </script>
 </body>
 </html>
