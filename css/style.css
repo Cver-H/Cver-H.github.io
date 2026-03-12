@@ -913,3 +913,50 @@ body {
 .center-banner-box:active {
     transform: translateX(-50%) scale(0.98); /* 点击时的下沉感 */
 }
+
+/* 小方框容器布局 */
+.feature-box-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* 两个方块之间的间距 */
+    margin-top: 55px;
+    margin-left:210px;
+}
+
+/* 单个小方块样式 */
+.feature-item {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    overflow:hidden;
+    
+    /* 毛玻璃效果 */
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px; /* 圆角 */
+    transition: all 0.3s ease;
+}
+
+/* 限制方块内的图片大小 */
+.feature-item img {
+    width: 85%;        /* 图片占据方块宽度的 60%，留点呼吸感 */
+    height: 85%;       /* 高度同理 */
+    object-fit: contain; /* 确保图片比例不缩放变形 */
+    transition: transform 0.3s ease; /* 增加一点悬停动画的平滑度 */
+}
+
+/* 鼠标悬停动画 */
+.feature-item:hover {
+    transform: translateY(-5px); /* 向上跳一下 */
+    background: rgba(255, 255, 255, 0.4);
+    border-color: #ffffff; /* 悬停时边框变绿，呼应你的主题色 */
+}
+
+
