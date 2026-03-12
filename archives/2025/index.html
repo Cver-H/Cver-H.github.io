@@ -898,19 +898,18 @@
     let currentType = "外语"; // 默认显示的分类，必须与数据中的 type 一致
     // 初始化渲染歌单列表
     function renderPlaylist() {
-      // 过滤出当前分类的歌曲
-      const filteredList = playlist.filter((song) => song.type === currentType);
-
-      playlistUl.innerHTML = filteredList
-        .map((song) => {
-          // 找到这首歌在原始总数组中的真实索引，确保 loadSong 能对上号
-          const realIndex = playlist.indexOf(song);
-          return `<li class="${realIndex === currentIndex ? "active" : ""}" data-index="${realIndex}">
-                ${song.title}
-            </li>`;
-        })
-        .join("");
-    }
+    // 过滤出当前分类的歌曲
+    const filteredList = playlist.filter(song => song.type === currentType);
+    
+    playlistUl.innerHTML = filteredList.map((song) => {
+        const realIndex = playlist.indexOf(song); 
+        // 这里的逻辑依然正确：只有 realIndex 等于 currentIndex 时才会变色
+        // 因为我们初始设为了 -1，所以没有任何 realIndex 会匹配成功，第一首歌就不会变色了
+        return `<li class="${realIndex === currentIndex ? 'active' : ''}" data-index="${realIndex}">
+            ${song.title}
+        </li>`;
+    }).join('');
+}
 
     // 切换分类点击事件
     tabs.forEach((tab) => {
@@ -990,16 +989,23 @@
     };
 
     // 唱片点击
-    disk.onclick = () => {
-      if (!audio.src) loadSong(0); // 第一次点，加载第一首
-      if (audio.paused) {
+    // 找到 disk.onclick 部分，修改如下：
+  disk.onclick = () => {
+    // 如果当前没有正在播放的歌曲（currentIndex 为 -1），则加载第一首
+    if (currentIndex === -1) {
+        loadSong(0); 
+        return; 
+    }
+
+    // 原有的播放/暂停逻辑保持不变
+    if (audio.paused) {
         audio.play();
-        disk.style.animationPlayState = "running";
-      } else {
+        disk.style.animationPlayState = 'running';
+    } else {
         audio.pause();
-        disk.style.animationPlayState = "paused";
-      }
-    };
+        disk.style.animationPlayState = 'paused';
+    }
+};
 
     // 更新逻辑
     audio.ontimeupdate = () => {
