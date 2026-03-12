@@ -11,239 +11,371 @@
 
   <main class="main-container">
     <div class="main-wrapper">
-
   <div class="center-banner-box">
-    <a href="javascript:void(0);" onclick="alert('你点击了图片！')" class="banner-click-area">
-        <img src="/images/bg2.jpg" alt="Center Banner" class="banner-img">
+    <a
+      href="javascript:void(0);"
+      onclick="alert('你点击了图片！')"
+      class="banner-click-area"
+    >
+      <img src="/images/bg2.jpg" alt="Center Banner" class="banner-img" />
     </a>
-</div>
-  
-  <div class="clock-card">
-  <div class="digit-container">
-    <div class="digit"><span class="bg">8</span><span class="num" id="h1">0</span></div>
-    <div class="digit"><span class="bg">8</span><span class="num" id="h2">0</span></div>
-    <div class="colon">:</div>
-    <div class="digit"><span class="bg">8</span><span class="num" id="m1">0</span></div>
-    <div class="digit"><span class="bg">8</span><span class="num" id="m2">0</span></div>
-    <div class="colon">:</div>
-    <div class="digit"><span class="bg">8</span><span class="num" id="s1">0</span></div>
-    <div class="digit"><span class="bg">8</span><span class="num" id="s2">0</span></div>
   </div>
-</div>
 
-<div class="glass-card">
-  
-  <div class="profile-section">
-    <div id="avatar-wrapper" style="position: relative; width: 120px; height: 120px; cursor: pointer; margin-bottom: 20px;">
-      <img id="avatar-img" src="/images/avatar.jpg" alt="头像" 
-           style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2;">
-      
-      <canvas id="avatar-canvas" style="position: absolute; top: 0; left: 0; z-index: 1; border-radius: 50%; opacity: 0;"></canvas>
+  <div class="clock-card">
+    <div class="digit-container">
+      <div class="digit">
+        <span class="bg">8</span><span class="num" id="h1">0</span>
+      </div>
+      <div class="digit">
+        <span class="bg">8</span><span class="num" id="h2">0</span>
+      </div>
+      <div class="colon">:</div>
+      <div class="digit">
+        <span class="bg">8</span><span class="num" id="m1">0</span>
+      </div>
+      <div class="digit">
+        <span class="bg">8</span><span class="num" id="m2">0</span>
+      </div>
+      <div class="colon">:</div>
+      <div class="digit">
+        <span class="bg">8</span><span class="num" id="s1">0</span>
+      </div>
+      <div class="digit">
+        <span class="bg">8</span><span class="num" id="s2">0</span>
+      </div>
     </div>
   </div>
-  <div class="welcome-text">
-      <p id="greeting"> 你好呀！</p>
+
+  <div class="glass-card">
+    <div class="profile-section">
+      <div
+        id="avatar-wrapper"
+        style="
+          position: relative;
+          width: 120px;
+          height: 120px;
+          cursor: pointer;
+          margin-bottom: 20px;
+        "
+      >
+        <img
+          id="avatar-img"
+          src="/images/avatar.jpg"
+          alt="头像"
+          style="
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+          "
+        />
+
+        <canvas
+          id="avatar-canvas"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            border-radius: 50%;
+            opacity: 0;
+          "
+        ></canvas>
+      </div>
+    </div>
+    <div class="welcome-text">
+      <p id="greeting">你好呀！</p>
       <p>我是塵</p>
       <p>歡迎来到我的博客</p>
-</div>    
-</div>
-
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-content">
       本站已运行：<span id="runtime"></span>
 
-      <span id="busuanzi_container_site_pv" style="display:none">
-        <span style="margin: 0 8px; opacity: 0.5;">|</span>
+      <span id="busuanzi_container_site_pv" style="display: none">
+        <span style="margin: 0 8px; opacity: 0.5">|</span>
         总访问量 <span id="busuanzi_value_site_pv"></span> 次
       </span>
     </div>
   </footer>
-
-  
-
-</div> 
+</div>
 
 <div class="calendar-card">
-    <div id="calendar-main">
-        <div class="calendar-header">
-            <span class="arrow" onclick="changeMonth(-1)"> < </span>
-            <span id="calendarDateText"></span>
-            <span class="arrow" onclick="changeMonth(1)"> > </span>
-        </div>
-        <div class="calendar-weekdays">
-            <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span class="sun">日</span>
-        </div>
-        <div class="calendar-grid" id="calendarGrid"></div>
+  <div id="calendar-main">
+    <div class="calendar-header">
+      <span class="arrow" onclick="changeMonth(-1)"> < </span>
+      <span id="calendarDateText"></span>
+      <span class="arrow" onclick="changeMonth(1)"> > </span>
     </div>
+    <div class="calendar-weekdays">
+      <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span
+      ><span>六</span><span class="sun">日</span>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
 
-    <div id="todo-panel" style="display: none; flex-direction: column; height: 100%;">
-        <div class="calendar-header">
-            <span id="todoDateTitle" style="font-size: 0.85rem; font-weight: bold;"></span>
-            <span class="arrow" onclick="closeTodo()" style="font-size: 0.75rem; color: #ffffff;">返回</span>
-        </div>
-        <ul id="todoList" style="list-style: none; padding: 0; margin: 10px 0; max-height: 120px; overflow-y: auto;"></ul>
-        <div style="display: flex; gap: 5px; margin-top: auto;">
-            <input type="time" id="todoTime" value="12:00" style="width: 70px; border: 1px solid rgba(0,0,0,0.1); border-radius: 5px; font-size: 0.7rem; padding: 2px;">
-            <input type="text" id="todoInput" placeholder="新的待办..." style="flex: 1; border: 1px solid rgba(0,0,0,0.1); border-radius: 5px; font-size: 0.7rem; padding: 2px 8px; outline: none;">
-            <button onclick="addTodo()" style="background: #73d0fc; color: white; border: none; border-radius: 5px; padding: 0 10px; cursor: pointer;">+</button>
-        </div>
+  <div
+    id="todo-panel"
+    style="display: none; flex-direction: column; height: 100%"
+  >
+    <div class="calendar-header">
+      <span
+        id="todoDateTitle"
+        style="font-size: 0.85rem; font-weight: bold"
+      ></span>
+      <span
+        class="arrow"
+        onclick="closeTodo()"
+        style="font-size: 0.75rem; color: #ffffff"
+        >返回</span
+      >
     </div>
-</div>
-  
-<div class="music-player">
-    <div class="album-art" id="music-disk">
-        <img src="images/黑胶唱片.png" alt="封面" id="disk-img">
-    </div>
-    
-    <div class="player-controls">
-        <div class="song-info">
-            <div class="text-group">
-        <span class="song-name" id="song-title">等待播放...</span>
-        <span id="song-artist" style="font-size: 0.7rem; margin-left: 8px;"></span>
-        </div>
-            <div class="btns" style="display: flex; gap: 8px; align-items: center;">
-                <span id="list-toggle" title="歌单" style="font-size: 0.7rem; cursor: pointer; opacity: 0.5;">歌单</span>
-                <span id="lrc-toggle" title="歌词开关">词</span>
-            </div>
-        </div>
-        <div class="progress-container" id="progress-bar">
-            <div class="progress" id="progress-inner"></div>
-        </div>
-        <audio id="audio-src"></audio>
-    </div>
-
-    <div id="playlist-panel" class="playlist-container">
-      <div class="category-tabs" style="display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-        <span class="tab-item active" data-type="外语" style="cursor:pointer; font-size:0.75rem; color:#beffac;">外语</span>
-        <span class="tab-item" data-type="音乐剧" style="cursor:pointer; font-size:0.75rem; color:#fff; opacity:0.6;">音乐剧</span>
-      </div>
-        <ul id="playlist-ul"></ul>
-    </div>
-
-    <div id="lrc-panel" class="lrc-container">
-        <p id="lrc-text" class="lrc-guide-style">点击唱片开启音乐之旅</p>
+    <ul
+      id="todoList"
+      style="
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+        max-height: 120px;
+        overflow-y: auto;
+      "
+    ></ul>
+    <div style="display: flex; gap: 5px; margin-top: auto">
+      <input
+        type="time"
+        id="todoTime"
+        value="12:00"
+        style="
+          width: 70px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 5px;
+          font-size: 0.7rem;
+          padding: 2px;
+        "
+      />
+      <input
+        type="text"
+        id="todoInput"
+        placeholder="新的待办..."
+        style="
+          flex: 1;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 5px;
+          font-size: 0.7rem;
+          padding: 2px 8px;
+          outline: none;
+        "
+      />
+      <button
+        onclick="addTodo()"
+        style="
+          background: #73d0fc;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          padding: 0 10px;
+          cursor: pointer;
+        "
+      >
+        +
+      </button>
     </div>
   </div>
-  
-  <nav class="sidebar-wrapper">
+</div>
+
+<div class="music-player">
+  <div class="album-art" id="music-disk">
+    <img src="images/黑胶唱片.png" alt="封面" id="disk-img" />
+  </div>
+
+  <div class="player-controls">
+    <div class="song-info">
+      <div class="text-group">
+        <span class="song-name" id="song-title">等待播放...</span>
+        <span
+          id="song-artist"
+          style="font-size: 0.7rem; margin-left: 8px"
+        ></span>
+      </div>
+      <div class="btns" style="display: flex; gap: 8px; align-items: center">
+        <span
+          id="list-toggle"
+          title="歌单"
+          style="font-size: 0.7rem; cursor: pointer; opacity: 0.5"
+          >歌单</span
+        >
+        <span id="lrc-toggle" title="歌词开关">词</span>
+      </div>
+    </div>
+    <div class="progress-container" id="progress-bar">
+      <div class="progress" id="progress-inner"></div>
+    </div>
+    <audio id="audio-src"></audio>
+  </div>
+
+  <div id="playlist-panel" class="playlist-container">
+    <div
+      class="category-tabs"
+      style="
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      "
+    >
+      <span
+        class="tab-item active"
+        data-type="外语"
+        style="cursor: pointer; font-size: 0.75rem; color: #beffac"
+        >外语</span
+      >
+      <span
+        class="tab-item"
+        data-type="音乐剧"
+        style="cursor: pointer; font-size: 0.75rem; color: #fff; opacity: 0.6"
+        >音乐剧</span
+      >
+    </div>
+    <ul id="playlist-ul"></ul>
+  </div>
+
+  <div id="lrc-panel" class="lrc-container">
+    <p id="lrc-text" class="lrc-guide-style">点击唱片开启音乐之旅</p>
+  </div>
+</div>
+
+<nav class="sidebar-wrapper">
   <div class="sidebar-header">
-    <img src="/images/avatar.jpg" class="side-avatar">
+    <img src="/images/avatar.jpg" class="side-avatar" />
     <div class="side-site-info">
       <span class="side-tittle">Cver's Blog</span>
     </div>
   </div>
 
   <div class="side-menu">
-    <a href="/" class="side-link active">作品集</a>
+    <a href="/" class="side-link">作品集</a>
     <a href="/photos" class="side-link">摄影</a>
     <a href="/write" class="side-link">随写</a>
     <a href="/repo" class="side-link">REPO</a>
     <a href="/aboutme" class="side-link">关于我</a>
   </div>
-  </nav>
+</nav>
 
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script
+  async
+  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"
+></script>
 
 <script>
-const wrapper = document.getElementById('avatar-wrapper');
-const img = document.getElementById('avatar-img');
-const canvas = document.getElementById('avatar-canvas');
-const ctx = canvas.getContext('2d');
-const imageObj = new Image();
-imageObj.src = img.src;
+  const wrapper = document.getElementById("avatar-wrapper");
+  const img = document.getElementById("avatar-img");
+  const canvas = document.getElementById("avatar-canvas");
+  const ctx = canvas.getContext("2d");
+  const imageObj = new Image();
+  imageObj.src = img.src;
 
-let particles = [];
-let animationId;
-let state = 'idle'; // idle: 闲置, active: 散开, returning: 拼回
+  let particles = [];
+  let animationId;
+  let state = "idle"; // idle: 闲置, active: 散开, returning: 拼回
 
-imageObj.onload = () => {
+  imageObj.onload = () => {
     canvas.width = 120;
     canvas.height = 120;
     ctx.drawImage(imageObj, 0, 0, 120, 120);
     const data = ctx.getImageData(0, 0, 120, 120).data;
-    
-    for (let y = 0; y < 120; y += 4) {
-        for (let x = 0; x < 120; x += 4) {
-            const i = (y * 120 + x) * 4;
-            if (data[i + 3] > 128) {
-                particles.push({
-                    originX: x, originY: y,
-                    x: x, y: y,
-                    color: `rgba(${data[i]},${data[i+1]},${data[i+2]},${data[i+3]})`,
-                    vx: Math.random() * 4 - 2,
-                    vy: Math.random() * 4 - 2
-                });
-            }
-        }
-    }
-};
 
-function animate() {
+    for (let y = 0; y < 120; y += 4) {
+      for (let x = 0; x < 120; x += 4) {
+        const i = (y * 120 + x) * 4;
+        if (data[i + 3] > 128) {
+          particles.push({
+            originX: x,
+            originY: y,
+            x: x,
+            y: y,
+            color: `rgba(${data[i]},${data[i + 1]},${data[i + 2]},${data[i + 3]})`,
+            vx: Math.random() * 4 - 2,
+            vy: Math.random() * 4 - 2,
+          });
+        }
+      }
+    }
+  };
+
+  function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let allBack = true;
 
-    particles.forEach(p => {
-        if (state === 'active') {
-            // 散开逻辑
-            p.x += p.vx;
-            p.y += p.vy;
-        } else if (state === 'returning') {
-            // 拼回逻辑：利用弹性公式吸回
-            const dx = p.originX - p.x;
-            const dy = p.originY - p.y;
-            p.x += dx * 0.1; 
-            p.y += dy * 0.2;
+    particles.forEach((p) => {
+      if (state === "active") {
+        // 散开逻辑
+        p.x += p.vx;
+        p.y += p.vy;
+      } else if (state === "returning") {
+        // 拼回逻辑：利用弹性公式吸回
+        const dx = p.originX - p.x;
+        const dy = p.originY - p.y;
+        p.x += dx * 0.1;
+        p.y += dy * 0.2;
 
-            // 检查是否还没回到位（允许 0.1 像素误差）
-            if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) allBack = false;
-        }
+        // 检查是否还没回到位（允许 0.1 像素误差）
+        if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) allBack = false;
+      }
 
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, 3, 3);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, 3, 3);
     });
 
     // 如果是拼回状态且全部到位了，切回原图
-    if (state === 'returning' && allBack) {
-        state = 'idle';
-        img.style.opacity = '1';
-        canvas.style.opacity = '0';
-        cancelAnimationFrame(animationId);
-        return; 
+    if (state === "returning" && allBack) {
+      state = "idle";
+      img.style.opacity = "1";
+      canvas.style.opacity = "0";
+      cancelAnimationFrame(animationId);
+      return;
     }
 
     animationId = requestAnimationFrame(animate);
-}
+  }
 
-wrapper.addEventListener('mouseenter', () => {
-    state = 'active';
-    img.style.opacity = '0';
-    canvas.style.opacity = '1';
+  wrapper.addEventListener("mouseenter", () => {
+    state = "active";
+    img.style.opacity = "0";
+    canvas.style.opacity = "1";
     // 每次进入先确保粒子在原点开始炸
-    particles.forEach(p => { p.x = p.originX; p.y = p.originY; });
+    particles.forEach((p) => {
+      p.x = p.originX;
+      p.y = p.originY;
+    });
     animate();
-});
+  });
 
-wrapper.addEventListener('mouseleave', () => {
-    state = 'returning';
-});
+  wrapper.addEventListener("mouseleave", () => {
+    state = "returning";
+  });
 
   function updateClock() {
     const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const s = String(now.getSeconds()).padStart(2, '0');
-    
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
+    const s = String(now.getSeconds()).padStart(2, "0");
+
     // 依次填入每一位数字
-    document.getElementById('h1').innerText = h[0];
-    document.getElementById('h2').innerText = h[1];
-    document.getElementById('m1').innerText = m[0];
-    document.getElementById('m2').innerText = m[1];
-    document.getElementById('s1').innerText = s[0];
-    document.getElementById('s2').innerText = s[1];
-}
-setInterval(updateClock, 1000);
-updateClock();
+    document.getElementById("h1").innerText = h[0];
+    document.getElementById("h2").innerText = h[1];
+    document.getElementById("m1").innerText = m[0];
+    document.getElementById("m2").innerText = m[1];
+    document.getElementById("s1").innerText = s[0];
+    document.getElementById("s2").innerText = s[1];
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
 
   function setGreeting() {
     var hour = new Date().getHours();
@@ -253,168 +385,199 @@ updateClock();
     else if (hour >= 14 && hour < 18) greeting = "下午好呀！";
     else if (hour >= 18 && hour < 24) greeting = "晚上好呀!";
     else greeting = "zzz...還不睡覺嗎？";
-    
+
     document.getElementById("greeting").innerText = greeting;
   }
   setGreeting();
 
-// 全局变量
-let viewDate = new Date();
-let currentTodoDate = ''; 
+  // 全局变量
+  let viewDate = new Date();
+  let currentTodoDate = "";
 
-function renderCalendar() {
-    const grid = document.getElementById('calendarGrid');
-    const dateTitle = document.getElementById('calendarDateText');
-    const weekdaySpans = document.querySelectorAll('.calendar-weekdays span');
-    
-    const now = new Date(); 
+  function renderCalendar() {
+    const grid = document.getElementById("calendarGrid");
+    const dateTitle = document.getElementById("calendarDateText");
+    const weekdaySpans = document.querySelectorAll(".calendar-weekdays span");
+
+    const now = new Date();
     const vYear = viewDate.getFullYear();
     const vMonth = viewDate.getMonth();
     const weekdays = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
     // 1. 重置并设置星期标题高亮
-    weekdaySpans.forEach(span => span.classList.remove('weekday-active'));
-    
+    weekdaySpans.forEach((span) => span.classList.remove("weekday-active"));
+
     // 只有在“本月”才高亮对应的星期标题
-    const isCurrentMonth = (vYear === now.getFullYear() && vMonth === now.getMonth());
+    const isCurrentMonth =
+      vYear === now.getFullYear() && vMonth === now.getMonth();
     if (isCurrentMonth) {
-        const todayDay = now.getDay(); // 0(日) - 6(六)
-        const targetIdx = (todayDay === 0) ? 6 : todayDay - 1; // 对应 一(0) - 日(6)
-        weekdaySpans[targetIdx].classList.add('weekday-active');
-        dateTitle.innerText = `${vYear}/${vMonth + 1}/${now.getDate()} ${weekdays[todayDay]}`;
+      const todayDay = now.getDay(); // 0(日) - 6(六)
+      const targetIdx = todayDay === 0 ? 6 : todayDay - 1; // 对应 一(0) - 日(6)
+      weekdaySpans[targetIdx].classList.add("weekday-active");
+      dateTitle.innerText = `${vYear}/${vMonth + 1}/${now.getDate()} ${weekdays[todayDay]}`;
     } else {
-        dateTitle.innerText = `${vYear}年 ${vMonth + 1}月`;
+      dateTitle.innerText = `${vYear}年 ${vMonth + 1}月`;
     }
 
     // 2. 计算月份偏移
-    const firstDay = new Date(vYear, vMonth, 1).getDay(); 
-    const daysInMonth = new Date(vYear, vMonth + 1, 0).getDate(); 
+    const firstDay = new Date(vYear, vMonth, 1).getDay();
+    const daysInMonth = new Date(vYear, vMonth + 1, 0).getDate();
     const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
-    grid.innerHTML = '';
+    grid.innerHTML = "";
 
     // 3. 填充空白
     for (let i = 0; i < startOffset; i++) {
-        grid.innerHTML += `<div class="day-cell empty"></div>`;
+      grid.innerHTML += `<div class="day-cell empty"></div>`;
     }
 
     // 4. 生成日期
     for (let d = 1; d <= daysInMonth; d++) {
-        const cell = document.createElement('div');
-        cell.className = 'day-cell';
-        cell.innerText = d;
+      const cell = document.createElement("div");
+      cell.className = "day-cell";
+      cell.innerText = d;
 
-        const dateKey = `${vYear}-${vMonth + 1}-${d}`;
-        const checkDate = new Date(vYear, vMonth, d);
-        const todayZero = new Date().setHours(0,0,0,0);
+      const dateKey = `${vYear}-${vMonth + 1}-${d}`;
+      const checkDate = new Date(vYear, vMonth, d);
+      const todayZero = new Date().setHours(0, 0, 0, 0);
 
-        // --- 状态判断 (过去/现在/未来) ---
-        if (isCurrentMonth && d === now.getDate()) {
-            cell.classList.add('day-today'); // 现在
-        } else if (checkDate < todayZero) {
-            cell.classList.add('day-past');  // 过去
-        } else {
-            cell.classList.add('day-future'); // 未来
-        }
+      // --- 状态判断 (过去/现在/未来) ---
+      if (isCurrentMonth && d === now.getDate()) {
+        cell.classList.add("day-today"); // 现在
+      } else if (checkDate < todayZero) {
+        cell.classList.add("day-past"); // 过去
+      } else {
+        cell.classList.add("day-future"); // 未来
+      }
 
-        // --- 星星逻辑 (有未完成的任务才显示黄色星星) ---
-        const todos = JSON.parse(localStorage.getItem(`todo-${dateKey}`) || '[]');
-        const hasPending = todos.some(t => !t.done); 
-        if (hasPending) cell.classList.add('has-event');
+      // --- 星星逻辑 (有未完成的任务才显示黄色星星) ---
+      const todos = JSON.parse(localStorage.getItem(`todo-${dateKey}`) || "[]");
+      const hasPending = todos.some((t) => !t.done);
+      if (hasPending) cell.classList.add("has-event");
 
-        cell.onclick = () => openTodo(dateKey);
-        grid.appendChild(cell);
+      cell.onclick = () => openTodo(dateKey);
+      grid.appendChild(cell);
     }
-}
+  }
 
-// --- 待办面板切换逻辑 ---
-function openTodo(dateKey) {
+  // --- 待办面板切换逻辑 ---
+  function openTodo(dateKey) {
     currentTodoDate = dateKey;
-    document.getElementById('calendar-main').style.display = 'none';
-    document.getElementById('todo-panel').style.display = 'flex';
-    document.getElementById('todoDateTitle').innerText = dateKey;
+    document.getElementById("calendar-main").style.display = "none";
+    document.getElementById("todo-panel").style.display = "flex";
+    document.getElementById("todoDateTitle").innerText = dateKey;
     renderTodos();
-}
+  }
 
-function closeTodo() {
-    document.getElementById('calendar-main').style.display = 'block';
-    document.getElementById('todo-panel').style.display = 'none';
-    renderCalendar(); 
-}
+  function closeTodo() {
+    document.getElementById("calendar-main").style.display = "block";
+    document.getElementById("todo-panel").style.display = "none";
+    renderCalendar();
+  }
 
-// --- 任务操作逻辑 (分类渲染) ---
-function renderTodos() {
-    const list = document.getElementById('todoList');
-    const todos = JSON.parse(localStorage.getItem(`todo-${currentTodoDate}`) || '[]');
-    const pending = todos.filter(t => !t.done).sort((a, b) => a.time.localeCompare(b.time));
-    const completed = todos.filter(t => t.done).sort((a, b) => a.time.localeCompare(b.time));
+  // --- 任务操作逻辑 (分类渲染) ---
+  function renderTodos() {
+    const list = document.getElementById("todoList");
+    const todos = JSON.parse(
+      localStorage.getItem(`todo-${currentTodoDate}`) || "[]",
+    );
+    const pending = todos
+      .filter((t) => !t.done)
+      .sort((a, b) => a.time.localeCompare(b.time));
+    const completed = todos
+      .filter((t) => t.done)
+      .sort((a, b) => a.time.localeCompare(b.time));
 
-    let html = '';
+    let html = "";
     if (pending.length > 0) {
-        html += `<div style="font-size:0.65rem; color:#73d0fc; margin:5px 0;">待完成</div>`;
-        html += pending.map((item, index) => `
+      html += `<div style="font-size:0.65rem; color:#73d0fc; margin:5px 0;">待完成</div>`;
+      html += pending
+        .map(
+          (item, index) => `
             <li class="todo-item">
                 <input type="checkbox" onclick="toggleTodo(${index}, false)" style="cursor:pointer;">
                 <span class="todo-item-time">${item.time}</span>
                 <span class="todo-item-text">${item.text}</span>
                 <span class="todo-item-del" onclick="deleteTodoByText('${item.text}', '${item.time}')">×</span>
-            </li>`).join('');
+            </li>`,
+        )
+        .join("");
     }
     if (completed.length > 0) {
-        html += `<div style="font-size:0.65rem; color:#999; margin:10px 0 5px;">已完成</div>`;
-        html += completed.map((item, index) => `
+      html += `<div style="font-size:0.65rem; color:#999; margin:10px 0 5px;">已完成</div>`;
+      html += completed
+        .map(
+          (item, index) => `
             <li class="todo-item" style="opacity: 0.6;">
                 <input type="checkbox" checked onclick="toggleTodo(${index}, true)" style="cursor:pointer;">
                 <span class="todo-item-time" style="text-decoration: line-through;">${item.time}</span>
                 <span class="todo-item-text" style="text-decoration: line-through;">${item.text}</span>
                 <span class="todo-item-del" onclick="deleteTodoByText('${item.text}', '${item.time}')">×</span>
-            </li>`).join('');
+            </li>`,
+        )
+        .join("");
     }
-    list.innerHTML = html || '<p style="text-align:center; color:#999; font-size:0.7rem; margin-top:20px;">暂无任务</p>';
-}
+    list.innerHTML =
+      html ||
+      '<p style="text-align:center; color:#999; font-size:0.7rem; margin-top:20px;">暂无任务</p>';
+  }
 
-function toggleTodo(index, isDoneList) {
-    const todos = JSON.parse(localStorage.getItem(`todo-${currentTodoDate}`) || '[]');
-    let pending = todos.filter(t => !t.done);
-    let completed = todos.filter(t => t.done);
+  function toggleTodo(index, isDoneList) {
+    const todos = JSON.parse(
+      localStorage.getItem(`todo-${currentTodoDate}`) || "[]",
+    );
+    let pending = todos.filter((t) => !t.done);
+    let completed = todos.filter((t) => t.done);
     if (isDoneList) completed[index].done = false;
     else pending[index].done = true;
-    localStorage.setItem(`todo-${currentTodoDate}`, JSON.stringify([...pending, ...completed]));
+    localStorage.setItem(
+      `todo-${currentTodoDate}`,
+      JSON.stringify([...pending, ...completed]),
+    );
     renderTodos();
-}
+  }
 
-function addTodo() {
-    const input = document.getElementById('todoInput');
-    const time = document.getElementById('todoTime');
+  function addTodo() {
+    const input = document.getElementById("todoInput");
+    const time = document.getElementById("todoTime");
     if (!input.value.trim()) return;
-    const todos = JSON.parse(localStorage.getItem(`todo-${currentTodoDate}`) || '[]');
-    todos.push({ text: input.value.trim(), time: time.value || "12:00", done: false });
+    const todos = JSON.parse(
+      localStorage.getItem(`todo-${currentTodoDate}`) || "[]",
+    );
+    todos.push({
+      text: input.value.trim(),
+      time: time.value || "12:00",
+      done: false,
+    });
     localStorage.setItem(`todo-${currentTodoDate}`, JSON.stringify(todos));
-    input.value = '';
+    input.value = "";
     renderTodos();
-}
+  }
 
-function deleteTodoByText(text, time) {
-    let todos = JSON.parse(localStorage.getItem(`todo-${currentTodoDate}`) || '[]');
-    todos = todos.filter(t => !(t.text === text && t.time === time));
+  function deleteTodoByText(text, time) {
+    let todos = JSON.parse(
+      localStorage.getItem(`todo-${currentTodoDate}`) || "[]",
+    );
+    todos = todos.filter((t) => !(t.text === text && t.time === time));
     localStorage.setItem(`todo-${currentTodoDate}`, JSON.stringify(todos));
     renderTodos();
-}
+  }
 
-function changeMonth(step) {
+  function changeMonth(step) {
     viewDate.setMonth(viewDate.getMonth() + step);
     renderCalendar();
-}
+  }
 
-document.addEventListener('DOMContentLoaded', renderCalendar);
+  document.addEventListener("DOMContentLoaded", renderCalendar);
 
-// 1. 定义歌单数据（在这里添加新歌和歌词）
-const playlist = [
-    { title: "Farewell, Neverland",
-        type:"外语",    
-        cover: "images/cover/txt.jpg", // 专辑图路径    
-        src: "music/TOMORROW X TOGETHER (투모로우바이투게더) - 네버랜드를 떠나며 (逃离梦幻岛).mp3",
-        lrc: `[00:00.00]Farewell, Neverland--Tomorrow X Together 
+  // 1. 定义歌单数据（在这里添加新歌和歌词）
+  const playlist = [
+    {
+      title: "Farewell, Neverland",
+      type: "外语",
+      cover: "images/cover/txt.jpg", // 专辑图路径
+      src: "music/TOMORROW X TOGETHER (투모로우바이투게더) - 네버랜드를 떠나며 (逃离梦幻岛).mp3",
+      lrc: `[00:00.00]Farewell, Neverland--Tomorrow X Together 
 [00:11.95]Neverland my love 이젠 안녕
 [00:14.71]And I'm free falling
 [00:16.84]별들아 모두 편히 자렴
@@ -465,15 +628,16 @@ const playlist = [
 [02:34.66]Falling falling
 [02:39.89]Falling falling
 [02:45.63]안녕 Neverland my love
-`
+`,
     },
-    
-      { title: "Mirror",
-        artist: "Maximillian",
-        type:"外语",    
-        cover: "images/cover/maxi.jpg", // 专辑图路径    
-        src: "music/mirror.mp3",
-        lrc: `[00:00.00]Mirror--Maximillian
+
+    {
+      title: "Mirror",
+      artist: "Maximillian",
+      type: "外语",
+      cover: "images/cover/maxi.jpg", // 专辑图路径
+      src: "music/mirror.mp3",
+      lrc: `[00:00.00]Mirror--Maximillian
 [00:03.51]Strange how it feels when I look in the mirror
 [00:10.32]I see a man with his eyes full of terror
 [00:15.42]And it's something so obvious but
@@ -518,15 +682,16 @@ const playlist = [
 [02:41.88]Scattered unfamiliar
 [02:45.36]Tell me mirror mirror
 [02:48.78]Who's that stranger on the wall
-`
+`,
     },
 
-    { title: "沉寂深海",
-        artist: "冒海飞",
-        type:"音乐剧",
-        cover: "images/cover/阴天.jpg",
-        src: "music/沉寂深海.mp3",
-        lrc: `[00:00.00]沉寂深海--冒海飞
+    {
+      title: "沉寂深海",
+      artist: "冒海飞",
+      type: "音乐剧",
+      cover: "images/cover/阴天.jpg",
+      src: "music/沉寂深海.mp3",
+      lrc: `[00:00.00]沉寂深海--冒海飞
 [00:12.38]⻛平浪静海面上
 [00:17.34]是谁掀起波澜
 [00:21.66]暗潮汹涌
@@ -557,14 +722,15 @@ const playlist = [
 [01:53.51]我虔诚放逐自己
 [01:58.88]这一生迎来结局
 [02:08.85]我沉入海底
-`
+`,
     },
-    { title:"腐烂",
-      artist:"冒海飞/王培杰",
-      type:"音乐剧",
+    {
+      title: "腐烂",
+      artist: "冒海飞/王培杰",
+      type: "音乐剧",
       cover: "images/cover/嫌疑人.jpg",
       src: "music/腐烂.mp3",
-      lrc:`[00:00.00]腐烂--嫌疑人X的献身
+      lrc: `[00:00.00]腐烂--嫌疑人X的献身
 [00:10.63]石神：
 [00:15.80]难道我已成为她幸福的阻碍
 [00:22.97]即使竭尽全力也无法躲避悲哀
@@ -633,13 +799,15 @@ const playlist = [
 [04:13.69]眼眸中流露出的嫌疑
 [04:17.02]将会在某一刻毁灭你
 
-    `},
-      { title:"解:设",
-      artist:"王培杰/冒海飞",
-      type:"音乐剧",
+    `,
+    },
+    {
+      title: "解:设",
+      artist: "王培杰/冒海飞",
+      type: "音乐剧",
       cover: "images/cover/嫌疑人.jpg",
       src: "music/解设.mp3",
-      lrc:`[00:00.00]解：设--王培杰/冒海飞
+      lrc: `[00:00.00]解：设--王培杰/冒海飞
 [00:09.91]石神:
 [00:10.16]幽静 雪夜 攀登者
 [00:13.48]迷失在山路之中
@@ -685,102 +853,110 @@ const playlist = [
 [02:32.03]这是我最真实的自白
 [02:35.66]合：
 [02:36.37]那些记忆 无法被掩埋
-    `}
-];
+    `,
+    },
+  ];
 
-let currentIndex = 0; // 当前播放索引
-let lyricData = [];   // 当前解析后的歌词数组
+  let currentIndex = -1; // 当前播放索引
+  let lyricData = []; // 当前解析后的歌词数组
 
-// 1. 解析 LRC 歌词的引擎
-function parseLyrics(text) {
-    const lines = text.split('\n');
+  // 1. 解析 LRC 歌词的引擎
+  function parseLyrics(text) {
+    const lines = text.split("\n");
     const res = [];
     const reg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
-    lines.forEach(l => {
-        const m = l.match(reg);
-        if (m) {
-            const t = parseInt(m[1]) * 60 + parseInt(m[2]) + (parseInt(m[3]) / (m[3].length === 3 ? 1000 : 100));
-            const txt = l.replace(reg, '').trim();
-            if (txt) res.push({ time: t, text: txt });
-        }
+    lines.forEach((l) => {
+      const m = l.match(reg);
+      if (m) {
+        const t =
+          parseInt(m[1]) * 60 +
+          parseInt(m[2]) +
+          parseInt(m[3]) / (m[3].length === 3 ? 1000 : 100);
+        const txt = l.replace(reg, "").trim();
+        if (txt) res.push({ time: t, text: txt });
+      }
     });
     return res;
-}
+  }
 
-document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     // 获取所有元素
-    const audio = document.getElementById('audio-src');
-    const disk = document.getElementById('music-disk');
-    const progressInner = document.getElementById('progress-inner');
-    const progressBar = document.getElementById('progress-bar');
-    const lrcToggle = document.getElementById('lrc-toggle');
-    const listToggle = document.getElementById('list-toggle');
-    const lrcPanel = document.getElementById('lrc-panel');
-    const playlistPanel = document.getElementById('playlist-panel');
-    const lrcText = document.getElementById('lrc-text');
-    const songTitle = document.getElementById('song-title');
-    const playlistUl = document.getElementById('playlist-ul');
-    const tabs = document.querySelectorAll('.tab-item');
-
+    const audio = document.getElementById("audio-src");
+    const disk = document.getElementById("music-disk");
+    const progressInner = document.getElementById("progress-inner");
+    const progressBar = document.getElementById("progress-bar");
+    const lrcToggle = document.getElementById("lrc-toggle");
+    const listToggle = document.getElementById("list-toggle");
+    const lrcPanel = document.getElementById("lrc-panel");
+    const playlistPanel = document.getElementById("playlist-panel");
+    const lrcText = document.getElementById("lrc-text");
+    const songTitle = document.getElementById("song-title");
+    const playlistUl = document.getElementById("playlist-ul");
+    const tabs = document.querySelectorAll(".tab-item");
 
     // 在脚本开头部分添加
-    let currentType = '外语'; // 默认显示的分类，必须与数据中的 type 一致
+    let currentType = "外语"; // 默认显示的分类，必须与数据中的 type 一致
     // 初始化渲染歌单列表
     function renderPlaylist() {
       // 过滤出当前分类的歌曲
-        const filteredList = playlist.filter(song => song.type === currentType);
-        
-        playlistUl.innerHTML = filteredList.map((song) => {
-            // 找到这首歌在原始总数组中的真实索引，确保 loadSong 能对上号
-            const realIndex = playlist.indexOf(song); 
-            return `<li class="${realIndex === currentIndex ? 'active' : ''}" data-index="${realIndex}">
+      const filteredList = playlist.filter((song) => song.type === currentType);
+
+      playlistUl.innerHTML = filteredList
+        .map((song) => {
+          // 找到这首歌在原始总数组中的真实索引，确保 loadSong 能对上号
+          const realIndex = playlist.indexOf(song);
+          return `<li class="${realIndex === currentIndex ? "active" : ""}" data-index="${realIndex}">
                 ${song.title}
             </li>`;
-        }).join('');
+        })
+        .join("");
     }
 
     // 切换分类点击事件
-    tabs.forEach(tab => {
-        tab.onclick = function() {
-            // 切换按钮高亮样式
-            tabs.forEach(t => {
-                t.style.color = "#fff";
-                t.style.opacity = "0.6";
-            });
-            this.style.color = "#beffac";
-            this.style.opacity = "1";
+    tabs.forEach((tab) => {
+      tab.onclick = function () {
+        // 切换按钮高亮样式
+        tabs.forEach((t) => {
+          t.style.color = "#fff";
+          t.style.opacity = "0.6";
+        });
+        this.style.color = "#beffac";
+        this.style.opacity = "1";
 
-            // 切换数据
-            currentType = this.dataset.type;
-            renderPlaylist();
-        };
+        // 切换数据
+        currentType = this.dataset.type;
+        renderPlaylist();
+      };
     });
 
     // 加载歌曲函数
     function loadSong(index) {
-        currentIndex = index;
-        const song = playlist[currentIndex];
-        audio.src = song.src;
-    document.getElementById('song-title').innerText = song.title;
-    document.getElementById('song-artist').innerText = song.artist ? `- ${song.artist}` : "";
-    // 2. 更新专辑封面图 (核心修改)
-    const diskImg = document.getElementById('disk-img');
-    if (song.cover) {
+      Index = index;
+      const song = playlist[currentIndex];
+      audio.src = song.src;
+      document.getElementById("song-title").innerText = song.title;
+      document.getElementById("song-artist").innerText = song.artist
+        ? `- ${song.artist}`
+        : "";
+      // 2. 更新专辑封面图 (核心修改)
+      const diskImg = document.getElementById("disk-img");
+      if (song.cover) {
         diskImg.src = song.cover;
-    } else {
+      } else {
         // 如果没设封面，可以用回默认的黑胶背景
         diskImg.src = "images/黑胶唱片.png";
-    }
+      }
 
-    // 3. 处理歌词和播放（你已有的代码）
-    lyricData = parseLyrics(song.lrc);
-    renderPlaylist();
-    audio.play();
-    document.getElementById('music-disk').style.animationPlayState = 'running';
-        // 让整个播放器的背景颜色随着封面稍微变化（进阶玩法）
-        // 让整个播放器的背景图变暗、透明度降低
-    // rgba(0, 0, 0, 0.5) 里的 0,0,0 代表黑色，0.5 代表 50% 的遮罩深度
-    /*const bgOpacity = 0.; // 你可以调节这个数字：0.8 会更暗，0.3 会更亮
+      // 3. 处理歌词和播放（你已有的代码）
+      lyricData = parseLyrics(song.lrc);
+      renderPlaylist();
+      audio.play();
+      document.getElementById("music-disk").style.animationPlayState =
+        "running";
+      // 让整个播放器的背景颜色随着封面稍微变化（进阶玩法）
+      // 让整个播放器的背景图变暗、透明度降低
+      // rgba(0, 0, 0, 0.5) 里的 0,0,0 代表黑色，0.5 代表 50% 的遮罩深度
+      /*const bgOpacity = 0.; // 你可以调节这个数字：0.8 会更暗，0.3 会更亮
     
     const player = document.querySelector('.music-player');
     player.style.backgroundImage = `linear-gradient(rgba(255, 255, 255, ${bgOpacity}), rgba(255, 255, 255, ${bgOpacity})), url(${song.cover || 'images/黑胶唱片.png'})`;
@@ -790,114 +966,126 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 歌单点击选歌
     playlistUl.onclick = (e) => {
-        if (e.target.tagName === 'LI') {
-            loadSong(parseInt(e.target.dataset.index));
-        }
+      if (e.target.tagName === "LI") {
+        loadSong(parseInt(e.target.dataset.index));
+      }
     };
 
     // 歌单开关
     listToggle.onclick = (e) => {
-        e.stopPropagation();
-        playlistPanel.classList.toggle('active');
-        listToggle.classList.toggle('active');
-        lrcPanel.classList.remove('active'); // 互斥
-        lrcToggle.classList.remove('active');
+      e.stopPropagation();
+      playlistPanel.classList.toggle("active");
+      listToggle.classList.toggle("active");
+      lrcPanel.classList.remove("active"); // 互斥
+      lrcToggle.classList.remove("active");
     };
 
     // 歌词开关
     lrcToggle.onclick = (e) => {
-        e.stopPropagation();
-        lrcPanel.classList.toggle('active');
-        lrcToggle.classList.toggle('active');
-        playlistPanel.classList.remove('active'); // 互斥
-        listToggle.classList.remove('active');
+      e.stopPropagation();
+      lrcPanel.classList.toggle("active");
+      lrcToggle.classList.toggle("active");
+      playlistPanel.classList.remove("active"); // 互斥
+      listToggle.classList.remove("active");
     };
 
     // 唱片点击
     disk.onclick = () => {
-        if (!audio.src) loadSong(0); // 第一次点，加载第一首
-        if (audio.paused) {
-            audio.play();
-            disk.style.animationPlayState = 'running';
-        } else {
-            audio.pause();
-            disk.style.animationPlayState = 'paused';
-        }
+      if (!audio.src) loadSong(0); // 第一次点，加载第一首
+      if (audio.paused) {
+        audio.play();
+        disk.style.animationPlayState = "running";
+      } else {
+        audio.pause();
+        disk.style.animationPlayState = "paused";
+      }
     };
 
     // 更新逻辑
     audio.ontimeupdate = () => {
       // 1. 更新进度条 (新增这部分)
-        if (audio.duration) {
-            const progressPercent = (audio.currentTime / audio.duration) * 100;
-            progressInner.style.width = progressPercent + '%';
-        }
+      if (audio.duration) {
+        const progressPercent = (audio.currentTime / audio.duration) * 100;
+        progressInner.style.width = progressPercent + "%";
+      }
 
-        // 2. 更新歌词 (保持你原有的逻辑)
-        if (lrcPanel.classList.contains('active') && lyricData.length > 0) {
-            const now = audio.currentTime;
-            let activeLine = lyricData.reduce((prev, curr) => (now >= curr.time ? curr : prev), lyricData[0]);
-    
-    if (lrcText.innerText !== activeLine.text) {
-        // --- 核心修改逻辑 ---
-        // 只要开始显示歌词了，就移除手写体类，加上歌词类
-        lrcText.classList.remove('lrc-guide-style');
-        lrcText.classList.add('lrc-content-style');
-        
-        lrcText.style.opacity = 0;
-        setTimeout(() => { 
-            lrcText.innerText = activeLine.text; 
-            lrcText.style.opacity = 1; 
-        }, 150);
-    }
-  }
-};
+      // 2. 更新歌词 (保持你原有的逻辑)
+      if (lrcPanel.classList.contains("active") && lyricData.length > 0) {
+        const now = audio.currentTime;
+        let activeLine = lyricData.reduce(
+          (prev, curr) => (now >= curr.time ? curr : prev),
+          lyricData[0],
+        );
+
+        if (lrcText.innerText !== activeLine.text) {
+          // --- 核心修改逻辑 ---
+          // 只要开始显示歌词了，就移除手写体类，加上歌词类
+          lrcText.classList.remove("lrc-guide-style");
+          lrcText.classList.add("lrc-content-style");
+
+          lrcText.style.opacity = 0;
+          setTimeout(() => {
+            lrcText.innerText = activeLine.text;
+            lrcText.style.opacity = 1;
+          }, 150);
+        }
+      }
+    };
 
     // 自动下一首
     audio.onended = () => {
-        loadSong((currentIndex + 1) % playlist.length);
+      loadSong((currentIndex + 1) % playlist.length);
     };
 
     // 进度条点击跳转
     progressBar.onclick = (e) => {
-        if (isNaN(audio.duration)) return;
-        const rect = progressBar.getBoundingClientRect();
-        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+      if (isNaN(audio.duration)) return;
+      const rect = progressBar.getBoundingClientRect();
+      audio.currentTime =
+        ((e.clientX - rect.left) / rect.width) * audio.duration;
     };
 
     renderPlaylist(); // 初始渲染
-});
+  });
 
-// --- 运行时间逻辑 ---
-function showRuntime() {
+  // --- 运行时间逻辑 ---
+  function showRuntime() {
     const runtimeEl = document.getElementById("runtime");
     if (!runtimeEl) return; // 容错：如果找不到元素就不执行，不报错
 
     // 建议确认年份：如果是去年刚开站，用 2025；如果是前年，用 2024
-    const startDate = new Date("2025/12/19 10:47:09"); 
+    const startDate = new Date("2025/12/19 10:47:09");
     const now = new Date();
     const timeDiff = now.getTime() - startDate.getTime();
 
     if (timeDiff < 0) {
-        runtimeEl.innerHTML = "即将开启...";
-        return;
+      runtimeEl.innerHTML = "即将开启...";
+      return;
     }
 
     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(
+      (timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-    runtimeEl.innerHTML = days + "天" + 
-        (hours < 10 ? "0" + hours : hours) + "時" + 
-        (minutes < 10 ? "0" + minutes : minutes) + "分 " + 
-        (seconds < 10 ? "0" + seconds : seconds) + "秒";
-}
+    runtimeEl.innerHTML =
+      days +
+      "天" +
+      (hours < 10 ? "0" + hours : hours) +
+      "時" +
+      (minutes < 10 ? "0" + minutes : minutes) +
+      "分 " +
+      (seconds < 10 ? "0" + seconds : seconds) +
+      "秒";
+  }
 
-// 确保页面加载后立即启动
-showRuntime();
-setInterval(showRuntime, 1000);
+  // 确保页面加载后立即启动
+  showRuntime();
+  setInterval(showRuntime, 1000);
 </script>
+
   </main>
 
 

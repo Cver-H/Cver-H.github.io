@@ -139,7 +139,7 @@ body {
 
 @font-face {
   font-family: '4';
-  src: url('../fonts/汇文明朝体.otf') format('truetype');
+  src: url('../fonts/汇文明朝体.woff2') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
