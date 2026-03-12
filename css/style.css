@@ -298,18 +298,18 @@ body {
 
 /* 底部固定条 */
 .site-footer {
-  position: fixed;
-  bottom: 3px;
+  position: fixed ;
+  bottom: 3px ;
   left:0; 
   right:0;     /* 稍微往上提一点，纯文字贴边不好看 */
   height: auto;      /* 高度自适应 */
   background: none;  /* 彻底去掉黑色背景 */
   backdrop-filter: none; /* 去掉模糊 */
   -webkit-backdrop-filter: none;
-  display: flex;
+  display: flex ;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000 ;
   pointer-events: none;
 }
 
@@ -914,13 +914,49 @@ body {
     transform: translateX(-50%) scale(0.98); /* 点击时的下沉感 */
 }
 
+/* 新增：包裹容器，让长方形和方块组水平对齐 */
+.action-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;       /* 长方形和方块组的间距 */
+    margin-top: 55px; /* 距离上方欢迎词的距离 */
+    width: 100%;
+}
+
+/* 新增：长方形排期样式 */
+.schedule-box {
+  position:relative;
+    width: 210px;
+    height: 45px;
+    display: flex;
+    left:-25px;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #f4f4f4; /* 主题绿 */
+    font-family: '4', sans-serif;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+/* 确保排期文字不换行 */
+.schedule-box {
+    white-space: nowrap;
+}
+
 /* 小方框容器布局 */
 .feature-box-container {
+  position:relative;
     display: flex;
     justify-content: center;
     gap: 15px; /* 两个方块之间的间距 */
-    margin-top: 55px;
-    margin-left:210px;
+    right:-30px;
 }
 
 /* 单个小方块样式 */
@@ -953,7 +989,7 @@ body {
 }
 
 /* 鼠标悬停动画 */
-.feature-item:hover {
+.schedule-box:hover,.feature-item:hover {
     transform: translateY(-5px); /* 向上跳一下 */
     background: rgba(255, 255, 255, 0.4);
     border-color: #ffffff; /* 悬停时边框变绿，呼应你的主题色 */
