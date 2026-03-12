@@ -930,7 +930,7 @@
 
     // 加载歌曲函数
     function loadSong(index) {
-      Index = index;
+      currentIndex = index;
       const song = playlist[currentIndex];
       audio.src = song.src;
       document.getElementById("song-title").innerText = song.title;
