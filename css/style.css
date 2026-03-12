@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'digital-7'; /* 我们给这套字体起个代号 */
-  src: url('../fonts/digital-7.ttf'); /* 告诉 CSS 去哪里找这个文件，注意这里的文件名必须和你下载的一模一样 */
+  src: url('../fonts/digital-7.woff2'); /* 告诉 CSS 去哪里找这个文件，注意这里的文件名必须和你下载的一模一样 */
   font-weight: normal;
   font-style: normal;
 }
@@ -118,21 +118,21 @@ body {
 /* 引入  字体 */
 @font-face {
   font-family: '1';
-  src: url('../fonts/chenyuluoyan.ttf') format('truetype');
+  src: url('../fonts/chenyuluoyan.woff2') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: '2';
-  src: url('../fonts/momo.ttf') format('truetype');
+  src: url('../fonts/momo.woff2') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: '3';
-  src: url('../fonts/butter.ttf') format('truetype');
+  src: url('../fonts/butter.woff2') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
