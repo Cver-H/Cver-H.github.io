@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>灵感影集</title> <link rel="stylesheet" href="board-style.css">
+</head>
+<body>
+
+<div class="film-wrapper">
+    <div class="film-strip">
+        <div class="film-frame" onclick="showMemory(1)">
+            <div class="frame-number">03.14</div>
+            <img src="/images/pic1.jpg" class="thumbnail">
+        </div>
+        <div class="film-frame empty">
+            <div class="frame-number">03.15</div>
+            <div class="no-content">---</div>
+        </div>
+        </div>
+</div>
+<div id="detail-modal" class="modal">
+    <div class="modal-close" onclick="closeModal()">×</div>
+    <div id="modal-body"></div>
+</div>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.post-card').forEach(card => {
+        observer.observe(card);
+    });
+</script>
+
+</body>
+</html>

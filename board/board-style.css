@@ -1,0 +1,40 @@
+.film-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow-x: scroll;
+    background: #1a1a1a; /* 深色背景更有底片感 */
+}
+
+.film-strip {
+    display: flex;
+    padding: 0 50vw; /* 让第一张图能居中 */
+    gap: 20px;
+}
+
+.film-frame {
+    flex: 0 0 250px;
+    height: 350px;
+    background: #2a2a2a;
+    border: 2px solid #333;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* 模拟胶片边缘的齿孔 */
+.film-frame::before, .film-frame::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    background-image: radial-gradient(circle, #1a1a1a 5px, transparent 5px);
+    background-size: 25px 20px;
+}
+.film-frame::before { top: 5px; }
+.film-frame::after { bottom: 5px; }
+
+.film-frame:hover { transform: translateY(-10px); border-color: #fff; }
+.thumbnail { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+.film-frame:hover .thumbnail { opacity: 1; }
