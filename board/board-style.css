@@ -1,40 +1,124 @@
+/* 全局基础设置 */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* 极致深色背景 */
+    overflow-y: hidden; /* 禁用上下滚动 */
+    font-family: '4', 'Microsoft YaHei', sans-serif;
+}
+
+/* 横向滚动容器 */
 .film-wrapper {
     width: 100vw;
     height: 100vh;
     display: flex;
     align-items: center;
-    overflow-x: scroll;
-    background: #1a1a1a; /* 深色背景更有底片感 */
+    overflow-x: auto;
+    padding: 0 10vw;
+    box-sizing: border-box;
 }
+
+/* 隐藏滚动条 */
+.film-wrapper::-webkit-scrollbar { display: none; }
 
 .film-strip {
     display: flex;
-    padding: 0 50vw; /* 让第一张图能居中 */
-    gap: 20px;
+    align-items: center; /* 确保高矮不一的图片水平居中对齐 */
+    gap: 80px; /* 胶片之间的间距 */
+    height: 80vh;
 }
 
-.film-frame {
-    flex: 0 0 250px;
-    height: 350px;
-    background: #2a2a2a;
-    border: 2px solid #333;
-    position: relative;
+/* 3D 翻转容器 */
+.film-card {
+    flex-shrink: 0;
+    perspective: 1500px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-/* 模拟胶片边缘的齿孔 */
-.film-frame::before, .film-frame::after {
+.card-inner {
+    position: relative;
+    width: min-content; /* 核心：宽度根据内部图片自动收缩/扩张 */
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+/* 翻转动作 */
+.film-card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* 正反面共有样式 */
+.card-front, .card-back {
+    backface-visibility: hidden;
+    background: #1a1a1a; /* 胶片黑底色 */
+    border-radius: 4px;
+    padding: 45px 15px; /* 上下留出放齿孔的空间 */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+/* 正面：展示图片 */
+.card-front {
+    position: relative;
+    display: block;
+}
+
+.img-content {
+    background: #000;
+    line-height: 0; /* 消除图片下方的缝隙 */
+}
+
+.img-content img {
+    max-height: 60vh; /* 锁定最大高度，宽度会根据比例自适应 */
+    width: auto;
+    display: block;
+}
+
+/* 胶片时间戳 */
+.film-time {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    color: #aaa;
+    font-family: monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+/* 动态齿孔 CSS 生成 */
+.card-front::before, .card-front::after {
     content: '';
     position: absolute;
+    left: 0;
     width: 100%;
-    height: 20px;
-    background-image: radial-gradient(circle, #1a1a1a 5px, transparent 5px);
-    background-size: 25px 20px;
+    height: 25px;
+    /* 使用径向渐变模拟齿孔，颜色必须与 body 背景一致 */
+    background-image: radial-gradient(circle, #121212 7px, transparent 7px);
+    background-size: 30px 25px;
 }
-.film-frame::before { top: 5px; }
-.film-frame::after { bottom: 5px; }
+.card-front::before { top: 12px; }
+.card-front::after { bottom: 12px; }
 
-.film-frame:hover { transform: translateY(-10px); border-color: #fff; }
-.thumbnail { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-.film-frame:hover .thumbnail { opacity: 1; }
+/* 背面：展示文字 */
+.card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000; /* 纯黑背面 */
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.handwritten-text {
+    color: #fff;
+    font-family: '4', sans-serif;
+    font-size: 1.4rem;
+    line-height: 2;
+    text-align: center;
+    word-break: break-all;
+}

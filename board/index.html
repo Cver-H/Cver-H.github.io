@@ -2,40 +2,42 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>灵感影集</title> <link rel="stylesheet" href="board-style.css">
+    <title>时间胶片</title>
+    <link rel="stylesheet" href="board-style.css">
 </head>
 <body>
 
 <div class="film-wrapper">
     <div class="film-strip">
-        <div class="film-frame" onclick="showMemory(1)">
-            <div class="frame-number">03.14</div>
-            <img src="/images/pic1.jpg" class="thumbnail">
+        
+        <div class="film-card" onclick="this.classList.toggle('flipped')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="film-time">2026 / 03 / 14</div>
+                    <div class="img-content">
+                        <img src="/images/board/pjw1.jpg"> </div>
+                </div>
+                <div class="card-back">
+                    <p class="handwritten-text">这是横版照片的留言。<br>胶片框会自动变宽。 </p>
+                </div>
+            </div>
         </div>
-        <div class="film-frame empty">
-            <div class="frame-number">03.15</div>
-            <div class="no-content">---</div>
-        </div>
-        </div>
-</div>
-<div id="detail-modal" class="modal">
-    <div class="modal-close" onclick="closeModal()">×</div>
-    <div id="modal-body"></div>
-</div>
 
-<script>
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.1 });
+        <div class="film-card" onclick="this.classList.toggle('flipped')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="film-time">2026 / 03 / 15</div>
+                    <div class="img-content">
+                        <img src="/images/board/1002解设.jpg"> </div>
+                </div>
+                <div class="card-back">
+                    <p class="handwritten-text">这是竖版照片的留言。<br>胶片框会自动变窄贴合图片。</p>
+                </div>
+            </div>
+        </div>
 
-    document.querySelectorAll('.post-card').forEach(card => {
-        observer.observe(card);
-    });
-</script>
+    </div>
+</div>
 
 </body>
 </html>
