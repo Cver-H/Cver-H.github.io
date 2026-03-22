@@ -1,10 +1,60 @@
-// 1. 定义歌单数据（在这里添加新歌和歌词）
+/**
+ * 1. 自动注入播放器所需的 CSS
+ */
+const link = document.createElement("link");
+link.rel = "stylesheet";
+link.href = "/css/style.css";
+document.head.appendChild(link);
+
+/**
+ * 2. 自动注入播放器的 HTML 结构
+ * 注意：所有路径都已补全开头的斜杠 /，确保二级页面可用
+ */
+const musicHTML = `
+<div class="music-player">
+  <div class="album-art" id="music-disk">
+    <img src="/images/黑胶唱片.png" alt="封面" id="disk-img" />
+  </div>
+  <div class="player-controls">
+    <div class="song-info">
+      <div class="text-group">
+        <span class="song-name" id="song-title">等待播放...</span>
+        <span id="song-artist" style="font-size: 0.7rem; margin-left: 8px"></span>
+      </div>
+      <div class="btns" style="display: flex; gap: 8px; align-items: center">
+        <span id="list-toggle" title="歌单" style="font-size: 0.7rem; cursor: pointer; opacity: 0.5">歌单</span>
+        <span id="lrc-toggle" title="歌词开关">词</span>
+      </div>
+    </div>
+    <div class="progress-container" id="progress-bar">
+      <div class="progress" id="progress-inner"></div>
+    </div>
+    <audio id="audio-src"></audio>
+  </div>
+
+  <div id="playlist-panel" class="playlist-container">
+    <div class="category-tabs" style="display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+      <span class="tab-item active" data-type="外语" style="cursor: pointer; font-size: 0.75rem; color: #38d7ff">外语</span>
+      <span class="tab-item" data-type="音乐剧" style="cursor: pointer; font-size: 0.75rem; color: #fff; opacity: 0.6">音乐剧</span>
+    </div>
+    <ul id="playlist-ul"></ul>
+  </div>
+
+  <div id="lrc-panel" class="lrc-container">
+    <p id="lrc-text" class="lrc-guide-style">点击唱片开启音乐之旅</p>
+  </div>
+</div>
+`;
+
+/**
+ * 3. 歌单数据
+ */
 const playlist = [
   {
     title: "Farewell, Neverland",
     type: "外语",
-    cover: "images/cover/txt.jpg", // 专辑图路径
-    src: "music/TOMORROW X TOGETHER (투모로우바이투게더) - 네버랜드를 떠나며 (逃离梦幻岛).mp3",
+    cover: "/images/cover/txt.jpg", // 专辑图路径
+    src: "/music/TOMORROW X TOGETHER (투모로우바이투게더) - 네버랜드를 떠나며 (逃离梦幻岛).mp3",
     lrc: `[00:00.00]Farewell, Neverland--Tomorrow X Together 
 [00:11.95]Neverland my love 이젠 안녕
 [00:14.71]And I'm free falling
@@ -63,8 +113,8 @@ const playlist = [
     title: "Mirror",
     artist: "Maximillian",
     type: "外语",
-    cover: "images/cover/maxi.jpg", // 专辑图路径
-    src: "music/mirror.mp3",
+    cover: "/images/cover/maxi.jpg", // 专辑图路径
+    src: "/music/mirror.mp3",
     lrc: `[00:00.00]Mirror--Maximillian
 [00:03.51]Strange how it feels when I look in the mirror
 [00:10.32]I see a man with his eyes full of terror
@@ -117,8 +167,8 @@ const playlist = [
     title: "沉寂深海",
     artist: "冒海飞",
     type: "音乐剧",
-    cover: "images/cover/阴天.jpg",
-    src: "music/沉寂深海.mp3",
+    cover: "/images/cover/阴天.jpg",
+    src: "/music/沉寂深海.mp3",
     lrc: `[00:00.00]沉寂深海--冒海飞
 [00:12.38]⻛平浪静海面上
 [00:17.34]是谁掀起波澜
@@ -156,8 +206,8 @@ const playlist = [
     title: "腐烂",
     artist: "冒海飞/王培杰",
     type: "音乐剧",
-    cover: "images/cover/嫌疑人.jpg",
-    src: "music/腐烂.mp3",
+    cover: "/images/cover/嫌疑人.jpg",
+    src: "/music/腐烂.mp3",
     lrc: `[00:00.00]腐烂--嫌疑人X的献身
 [00:10.63]石神：
 [00:15.80]难道我已成为她幸福的阻碍
@@ -233,8 +283,8 @@ const playlist = [
     title: "解:设",
     artist: "王培杰/冒海飞",
     type: "音乐剧",
-    cover: "images/cover/嫌疑人.jpg",
-    src: "music/解设.mp3",
+    cover: "/images/cover/嫌疑人.jpg",
+    src: "/music/解设.mp3",
     lrc: `[00:00.00]解：设--王培杰/冒海飞
 [00:09.91]石神:
 [00:10.16]幽静 雪夜 攀登者
@@ -285,10 +335,12 @@ const playlist = [
   },
 ];
 
-let currentIndex = -1; // 当前播放索引
-let lyricData = []; // 当前解析后的歌词数组
+let currentIndex = -1;
+let lyricData = [];
 
-// 1. 解析 LRC 歌词的引擎
+/**
+ * 4. 歌词解析引擎
+ */
 function parseLyrics(text) {
   const lines = text.split("\n");
   const res = [];
@@ -307,8 +359,10 @@ function parseLyrics(text) {
   return res;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // 获取所有元素
+/**
+ * 5. 核心播放逻辑 (由之前的代码封装而来)
+ */
+function initMusicPlayer() {
   const audio = document.getElementById("audio-src");
   const disk = document.getElementById("music-disk");
   const progressInner = document.getElementById("progress-inner");
@@ -318,115 +372,68 @@ document.addEventListener("DOMContentLoaded", () => {
   const lrcPanel = document.getElementById("lrc-panel");
   const playlistPanel = document.getElementById("playlist-panel");
   const lrcText = document.getElementById("lrc-text");
-  const songTitle = document.getElementById("song-title");
   const playlistUl = document.getElementById("playlist-ul");
   const tabs = document.querySelectorAll(".tab-item");
+  const songTitle = document.getElementById("song-title");
+  const songArtist = document.getElementById("song-artist");
+  const diskImg = document.getElementById("disk-img");
 
-  // 在脚本开头部分添加
-  let currentType = "外语"; // 默认显示的分类，必须与数据中的 type 一致
-  // 初始化渲染歌单列表
+  let currentType = "外语";
+
   function renderPlaylist() {
-    // 过滤出当前分类的歌曲
-    const filteredList = playlist.filter((song) => song.type === currentType);
-
+    const filteredList = playlist.filter((s) => s.type === currentType);
     playlistUl.innerHTML = filteredList
       .map((song) => {
-        const realIndex = playlist.indexOf(song);
-        // 这里的逻辑依然正确：只有 realIndex 等于 currentIndex 时才会变色
-        // 因为我们初始设为了 -1，所以没有任何 realIndex 会匹配成功，第一首歌就不会变色了
-        return `<li class="${realIndex === currentIndex ? "active" : ""}" data-index="${realIndex}">
-            ${song.title}
-        </li>`;
+        const realIdx = playlist.indexOf(song);
+        return `<li class="${realIdx === currentIndex ? "active" : ""}" data-index="${realIdx}">${song.title}</li>`;
       })
       .join("");
   }
 
-  // 切换分类点击事件
-  tabs.forEach((tab) => {
-    tab.onclick = function () {
-      // 切换按钮高亮样式
-      tabs.forEach((t) => {
-        t.style.color = "#fff";
-        t.style.opacity = "0.6";
-      });
-      this.style.color = "#38d7ff";
-      this.style.opacity = "1";
-
-      // 切换数据
-      currentType = this.dataset.type;
-      renderPlaylist();
-    };
-  });
-
-  // 加载歌曲函数
-  function loadSong(index) {
+  function loadSong(index, shouldPlay = true) {
     currentIndex = index;
-    const song = playlist[currentIndex];
+    const song = playlist[index];
     audio.src = song.src;
-    document.getElementById("song-title").innerText = song.title;
-    document.getElementById("song-artist").innerText = song.artist
-      ? `- ${song.artist}`
-      : "";
-    // 2. 更新专辑封面图 (核心修改)
-    const diskImg = document.getElementById("disk-img");
-    if (song.cover) {
-      diskImg.src = song.cover;
-    } else {
-      // 如果没设封面，可以用回默认的黑胶背景
-      diskImg.src = "images/黑胶唱片.png";
-    }
-
-    // 3. 处理歌词和播放（你已有的代码）
+    songTitle.innerText = song.title;
+    songArtist.innerText = song.artist ? `- ${song.artist}` : "";
+    diskImg.src = song.cover || "/images/黑胶唱片.png";
     lyricData = parseLyrics(song.lrc);
     renderPlaylist();
-    audio.play();
-    document.getElementById("music-disk").style.animationPlayState = "running";
-    // 让整个播放器的背景颜色随着封面稍微变化（进阶玩法）
-    // 让整个播放器的背景图变暗、透明度降低
-    // rgba(0, 0, 0, 0.5) 里的 0,0,0 代表黑色，0.5 代表 50% 的遮罩深度
-    /*const bgOpacity = 0.; // 你可以调节这个数字：0.8 会更暗，0.3 会更亮
-    
-    const player = document.querySelector('.music-player');
-    player.style.backgroundImage = `linear-gradient(rgba(255, 255, 255, ${bgOpacity}), rgba(255, 255, 255, ${bgOpacity})), url(${song.cover || 'images/黑胶唱片.png'})`;
-    player.style.backgroundSize = "cover";
-    player.style.backgroundPosition = "center"; // 确保背景图居中，不跑偏*/
+    if (shouldPlay) {
+      audio.play().catch(() => console.log("等待交互后播放"));
+      disk.style.animationPlayState = "running";
+    }
   }
 
-  // 歌单点击选歌
-  playlistUl.onclick = (e) => {
-    if (e.target.tagName === "LI") {
-      loadSong(parseInt(e.target.dataset.index));
+  // 【核心功能】自动续播检测
+  function checkRestore() {
+    const lastIndex = localStorage.getItem("music_index");
+    const lastTime = localStorage.getItem("music_time");
+    const wasPlaying = localStorage.getItem("music_playing") === "true";
+
+    if (lastIndex !== null) {
+      currentIndex = parseInt(lastIndex);
+      loadSong(currentIndex, false); // 加载数据但不立即播放
+      audio.currentTime = parseFloat(lastTime || 0);
+
+      if (wasPlaying) {
+        audio
+          .play()
+          .then(() => {
+            disk.style.animationPlayState = "running";
+          })
+          .catch(() => {
+            console.log("切页续播被拦截，点击页面任意位置恢复音乐");
+          });
+      }
     }
-  };
+  }
 
-  // 歌单开关
-  listToggle.onclick = (e) => {
-    e.stopPropagation();
-    playlistPanel.classList.toggle("active");
-    listToggle.classList.toggle("active");
-    lrcPanel.classList.remove("active"); // 互斥
-    lrcToggle.classList.remove("active");
-  };
-
-  // 歌词开关
-  lrcToggle.onclick = (e) => {
-    e.stopPropagation();
-    lrcPanel.classList.toggle("active");
-    lrcToggle.classList.toggle("active");
-    playlistPanel.classList.remove("active"); // 互斥
-    listToggle.classList.remove("active");
-  };
-
-  // 唱片点击
-  // 找到 disk.onclick 部分，修改如下：
   disk.onclick = () => {
-    // 如果当前没有正在播放的歌曲（currentIndex 为 -1），则加载第一首
     if (currentIndex === -1) {
       loadSong(0);
       return;
     }
-
-    // 原有的播放/暂停逻辑保持不变
     if (audio.paused) {
       audio.play();
       disk.style.animationPlayState = "running";
@@ -436,48 +443,79 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // 更新逻辑
+  // 进度保存与歌词滚动
   audio.ontimeupdate = () => {
-    // 1. 更新进度条 (新增这部分)
     if (audio.duration) {
-      const progressPercent = (audio.currentTime / audio.duration) * 100;
-      progressInner.style.width = progressPercent + "%";
+      progressInner.style.width =
+        (audio.currentTime / audio.duration) * 100 + "%";
+      // 实时保存进度到本地
+      localStorage.setItem("music_index", currentIndex);
+      localStorage.setItem("music_time", audio.currentTime);
     }
-
-    // 2. 更新歌词 (保持你原有的逻辑)
     if (lrcPanel.classList.contains("active") && lyricData.length > 0) {
       const now = audio.currentTime;
       let activeLine = lyricData.reduce(
         (prev, curr) => (now >= curr.time ? curr : prev),
         lyricData[0],
       );
-
       if (lrcText.innerText !== activeLine.text) {
-        // --- 核心修改逻辑 ---
-        // 只要开始显示歌词了，就移除手写体类，加上歌词类
-        lrcText.classList.remove("lrc-guide-style");
-        lrcText.classList.add("lrc-content-style");
-
-        lrcText.style.opacity = 0;
-        setTimeout(() => {
-          lrcText.innerText = activeLine.text;
-          lrcText.style.opacity = 1;
-        }, 150);
+        lrcText.innerText = activeLine.text;
+        lrcText.classList.replace("lrc-guide-style", "lrc-content-style");
       }
     }
   };
 
-  // 自动下一首
-  audio.onended = () => {
-    loadSong((currentIndex + 1) % playlist.length);
-  };
+  audio.onplay = () => localStorage.setItem("music_playing", "true");
+  audio.onpause = () => localStorage.setItem("music_playing", "false");
 
-  // 进度条点击跳转
+  tabs.forEach((tab) => {
+    tab.onclick = function () {
+      tabs.forEach((t) => {
+        t.style.color = "#fff";
+        t.style.opacity = "0.6";
+      });
+      this.style.color = "#38d7ff";
+      this.style.opacity = "1";
+      currentType = this.dataset.type;
+      renderPlaylist();
+    };
+  });
+
+  playlistUl.onclick = (e) => {
+    if (e.target.tagName === "LI") loadSong(parseInt(e.target.dataset.index));
+  };
+  listToggle.onclick = (e) => {
+    e.stopPropagation();
+    playlistPanel.classList.toggle("active");
+    lrcPanel.classList.remove("active");
+  };
+  lrcToggle.onclick = (e) => {
+    e.stopPropagation();
+    lrcPanel.classList.toggle("active");
+    playlistPanel.classList.remove("active");
+  };
+  audio.onended = () => loadSong((currentIndex + 1) % playlist.length);
   progressBar.onclick = (e) => {
-    if (isNaN(audio.duration)) return;
     const rect = progressBar.getBoundingClientRect();
     audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
   };
 
-  renderPlaylist(); // 初始渲染
-});
+  renderPlaylist();
+  checkRestore(); // 初始化完成后检查是否需要续播
+}
+
+/**
+ * 5. 执行注入与启动
+ */
+const runMusicAutoTask = () => {
+  if (!document.querySelector(".music-player")) {
+    document.body.insertAdjacentHTML("beforeend", musicHTML);
+    initMusicPlayer();
+  }
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", runMusicAutoTask);
+} else {
+  runMusicAutoTask();
+}
