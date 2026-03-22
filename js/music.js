@@ -510,31 +510,51 @@ function initMusicPlayer() {
 /**
  * 最终整合：确保 刷新、切页、后退 都能自动续播
  */
-function startApp() {
-    // 1. 如果页面没播放器就插一个，有的话就不重复插
-    if (!document.querySelector(".music-player")) {
-        document.body.insertAdjacentHTML("beforeend", musicHTML);
-    }
-    // 2. 运行你定义的初始化逻辑（里面有恢复进度的 checkRestore）
+/**
+ * 最终整合修复版：专门对付 GitHub Pages 后退不播放
+ */
+const startApp = () => {
+  // 1. 彻底检查并注入 HTML
+  if (!document.querySelector(".music-player")) {
+    document.body.insertAdjacentHTML("beforeend", musicHTML);
+  }
+  
+  // 2. 初始化播放器逻辑 (会触发里面的 checkRestore)
+  if (typeof initMusicPlayer === "function") {
     initMusicPlayer();
-}
+  }
+};
 
-// 场景 A：处理常规进入页面和刷新
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startApp);
+// --- 启动监听组合拳 ---
+
+// 1. 处理首次进入或刷新
+if (document.readyState === "complete" || document.readyState === "interactive") {
+  startApp();
 } else {
-    startApp();
+  document.addEventListener("DOMContentLoaded", startApp);
 }
 
-// 场景 B：处理【后退】按钮返回（解决你说的后退不播放）
+// 2. 专门对付 GitHub/手机浏览器的“后退” (BFCache)
 window.addEventListener("pageshow", (event) => {
-    // persisted 为 true 表示是从浏览器缓存里“后退”回来的
-    if (event.persisted) {
-        // 先清理可能残留在缓存 DOM 里的旧播放器，防止事件监听错乱
-        const oldPlayer = document.querySelector(".music-player");
-        if (oldPlayer) oldPlayer.remove();
-        
-        // 重新启动
-        startApp();
+  // 无论是不是从缓存恢复(persisted)，都强行刷一遍状态
+  const oldPlayer = document.querySelector(".music-player");
+  if (oldPlayer) {
+    // 如果发现已经有播放器了，说明是从缓存回来的，我们要重置它的状态
+    console.log("检测到后退/缓存返回，正在同步状态...");
+    // 强制触发一次恢复逻辑
+    if (typeof checkRestore === "function") {
+        checkRestore(); 
     }
+  } else {
+    startApp();
+  }
 });
+
+// 3. 兜底：万一上面都漏了，点一下页面就激活
+window.addEventListener("click", () => {
+    const audio = document.getElementById("audio-src");
+    if (audio && audio.paused && localStorage.getItem("music_playing") === "true") {
+        audio.play().catch(() => {});
+        document.getElementById("music-disk").style.animationPlayState = "running";
+    }
+}, { once: true }); // 只触发一次，不影响后续性能
