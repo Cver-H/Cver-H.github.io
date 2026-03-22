@@ -507,15 +507,34 @@ function initMusicPlayer() {
 /**
  * 5. 执行注入与启动
  */
-const runMusicAutoTask = () => {
-  if (!document.querySelector(".music-player")) {
-    document.body.insertAdjacentHTML("beforeend", musicHTML);
+/**
+ * 最终整合：确保 刷新、切页、后退 都能自动续播
+ */
+function startApp() {
+    // 1. 如果页面没播放器就插一个，有的话就不重复插
+    if (!document.querySelector(".music-player")) {
+        document.body.insertAdjacentHTML("beforeend", musicHTML);
+    }
+    // 2. 运行你定义的初始化逻辑（里面有恢复进度的 checkRestore）
     initMusicPlayer();
-  }
-};
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", runMusicAutoTask);
-} else {
-  runMusicAutoTask();
 }
+
+// 场景 A：处理常规进入页面和刷新
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startApp);
+} else {
+    startApp();
+}
+
+// 场景 B：处理【后退】按钮返回（解决你说的后退不播放）
+window.addEventListener("pageshow", (event) => {
+    // persisted 为 true 表示是从浏览器缓存里“后退”回来的
+    if (event.persisted) {
+        // 先清理可能残留在缓存 DOM 里的旧播放器，防止事件监听错乱
+        const oldPlayer = document.querySelector(".music-player");
+        if (oldPlayer) oldPlayer.remove();
+        
+        // 重新启动
+        startApp();
+    }
+});
