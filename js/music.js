@@ -407,23 +407,35 @@ function initMusicPlayer() {
 
   // 【核心功能】自动续播检测
   function checkRestore() {
-    const lastIndex = localStorage.getItem("music_index");
+    const lastIdx = localStorage.getItem("music_index");
     const lastTime = localStorage.getItem("music_time");
     const wasPlaying = localStorage.getItem("music_playing") === "true";
 
-    if (lastIndex !== null) {
-      currentIndex = parseInt(lastIndex);
-      loadSong(currentIndex, false); // 加载数据但不立即播放
-      audio.currentTime = parseFloat(lastTime || 0);
+    if (lastIdx !== null) {
+      // 1. 加载歌曲和进度
+      loadSong(parseInt(lastIdx), false, parseFloat(lastTime || 0));
 
       if (wasPlaying) {
+        // 2. 【核心】先静音播放，这不会被浏览器拦截
+        audio.muted = true;
         audio
           .play()
           .then(() => {
             disk.style.animationPlayState = "running";
+
+            // 3. 只要用户鼠标动了、滚轮转了、或者摸了屏幕，就立刻解除静音
+            const unlock = () => {
+              audio.muted = false;
+              window.removeEventListener("mousemove", unlock);
+              window.removeEventListener("wheel", unlock);
+              window.removeEventListener("touchstart", unlock);
+            };
+            window.addEventListener("mousemove", unlock);
+            window.addEventListener("wheel", unlock);
+            window.addEventListener("touchstart", unlock);
           })
-          .catch(() => {
-            console.log("切页续播被拦截，点击页面任意位置恢复音乐");
+          .catch((e) => {
+            console.error("静音播放也失败，可能是浏览器极度严格", e);
           });
       }
     }

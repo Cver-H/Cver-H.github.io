@@ -2,9 +2,9 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #121212; /* 极致深色背景 */
-    overflow-y: hidden; /* 禁用上下滚动 */
-    font-family: '4', 'Microsoft YaHei', sans-serif;
+    background-color: #080808; /* 更深的底色，衬托胶片 */
+    overflow-y: hidden;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 /* 横向滚动容器 */
@@ -18,107 +18,156 @@ body {
     box-sizing: border-box;
 }
 
-/* 隐藏滚动条 */
 .film-wrapper::-webkit-scrollbar { display: none; }
 
 .film-strip {
     display: flex;
-    align-items: center; /* 确保高矮不一的图片水平居中对齐 */
-    gap: 80px; /* 胶片之间的间距 */
-    height: 80vh;
+    align-items: center; 
+    gap: 120px; /* 拉大间距，增加高级感 */
 }
 
 /* 3D 翻转容器 */
 .film-card {
     flex-shrink: 0;
-    perspective: 1500px;
-    cursor: pointer;
+    perspective: 2000px;
 }
 
 .card-inner {
     position: relative;
-    width: min-content; /* 核心：宽度根据内部图片自动收缩/扩张 */
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: min-content; 
     transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* 翻转动作 */
 .film-card.flipped .card-inner {
     transform: rotateY(180deg);
 }
 
-/* 正反面共有样式 */
+/* 胶片底座整容版 */
 .card-front, .card-back {
-    backface-visibility: hidden;
-    background: #1a1a1a; /* 胶片黑底色 */
-    border-radius: 4px;
-    padding: 45px 15px; /* 上下留出放齿孔的空间 */
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-}
-
-/* 正面：展示图片 */
-.card-front {
     position: relative;
-    display: block;
+    backface-visibility: hidden;
+    /* 重点：渐变底色，增加质感 */
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+    border-radius: 4px;
+    padding: 35px 8px; /* 极窄的侧边距，更像电影底片 */
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+    box-sizing: border-box;
+    height: calc(45vh + 70px); /* 45vh是图高，70px是总边距 */
 }
 
-.img-content {
-    background: #000;
-    line-height: 0; /* 消除图片下方的缝隙 */
-}
-
-.img-content img {
-    max-height: 60vh; /* 锁定最大高度，宽度会根据比例自适应 */
-    width: auto;
-    display: block;
-}
-
-/* 胶片时间戳 */
-.film-time {
-    position: absolute;
-    top: 15px;
-    left: 20px;
-    color: #aaa;
-    font-family: monospace;
-    font-size: 14px;
-    letter-spacing: 1px;
-}
-
-/* 动态齿孔 CSS 生成 */
-.card-front::before, .card-front::after {
+/* 齿孔：改成长方形，并且带一点内阴影感 */
+.card-front::before, .card-front::after,
+.card-back::before, .card-back::after {
     content: '';
     position: absolute;
     left: 0;
     width: 100%;
-    height: 25px;
-    /* 使用径向渐变模拟齿孔，颜色必须与 body 背景一致 */
-    background-image: radial-gradient(circle, #121212 7px, transparent 7px);
-    background-size: 30px 25px;
+    height: 10px;
+    /* 核心：长方形齿孔比圆孔更硬核 */
+    background-image: linear-gradient(to right, #000 65%, transparent 65%);
+    background-size: 20px 100%;
 }
-.card-front::before { top: 12px; }
-.card-front::after { bottom: 12px; }
 
-/* 背面：展示文字 */
+.card-front::before, .card-back::before { top: 12px; }
+.card-front::after, .card-back::after { bottom: 12px; }
+
+/* 正面图片容器 */
+.img-content {
+    background: #000;
+    line-height: 0;
+    /* 增加内框线，模拟胶片嵌入感 */
+    outline: 1px solid #222;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+}
+
+.img-content img {
+    height: 45vh; /* 锁死高度 */
+    width: auto;
+    display: block;
+    /* 哪怕是9:16，也给一个最小宽度，防止太细 */
+    min-width: calc(45vh * 0.65); 
+    object-fit: cover;
+    filter: contrast(1.1) brightness(0.9); /* 微调滤镜，更有老电影味 */
+}
+
+/* 胶片日期：放在左上角，但增加一点“印章”感 */
+.film-time {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    z-index: 10;
+    
+    /* 字体设计：用等宽字体，更有底片感 */
+    color: #cc9966; /* 复古的浅橙色，像底片上的打码 */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+    opacity: 0.8;
+}
+
+/* 反面留言区 */
 .card-back {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000; /* 纯黑背面 */
     transform: rotateY(180deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-    box-sizing: border-box;
 }
 
 .handwritten-text {
-    color: #fff;
-    font-family: '4', sans-serif;
-    font-size: 1.4rem;
-    line-height: 2;
-    text-align: center;
-    word-break: break-all;
+    background: #050505;
+    color: #888;
+    margin: 0;
+    padding: 25px;
+    height: 45vh;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    /* 这里的内框线要和正面一致 */
+    outline: 1px solid #1a1a1a;
 }
+
+/* 隐藏滚动条 */
+.handwritten-text::-webkit-scrollbar { width: 0; }
+
+.door-loader {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 9999; background: #000; display: flex; justify-content: center; align-items: center;
+}
+.door-left, .door-right {
+    position: absolute; width: 50.5%; height: 100%; background: #000; z-index: 1;
+}
+.door-left { left: 0; } .door-right { right: 0; }
+
+.loader-container {
+    display: flex; z-index: 10; align-items: baseline;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.group { display: flex; align-items: baseline; }
+
+.main {
+    font-size: 2.2rem; color: #fff; font-weight: 300;
+    line-height: 1; position: relative; z-index: 2;
+}
+
+/* 核心：用 mask 实现文字流出感 */
+.mask {
+    overflow: hidden; width: 0; display: flex; align-items: baseline;
+}
+
+.sub {
+    font-size: 1.6rem; color: #fff; font-weight: 300;
+    white-space: nowrap; padding-left: 4px; /* 字母间的微小呼吸间距 */
+}
+
+/* 初始时两组字母之间的距离，JS 会动这个值 */
+.spacer { width: 0px; }

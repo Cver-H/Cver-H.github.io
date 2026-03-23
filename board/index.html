@@ -2,10 +2,29 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>时间胶片</title>
+    <title>PHOTO</title>
     <link rel="stylesheet" href="board-style.css">
 </head>
 <body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<div id="loader" class="door-loader">
+    <div class="door-left"></div>
+    <div class="door-right"></div>
+    
+    <div class="loader-container">
+        <div class="group" id="groupL">
+            <span class="main">H</span>
+            <div class="mask"><span class="sub">cver</span></div>
+        </div>
+        <div class="spacer"></div>
+        <div class="group" id="groupR">
+            <span class="main">C</span>
+            <div class="mask"><span class="sub">hen</span></div>
+        </div>
+    </div>
+</div>
 
 <div class="film-wrapper">
     <div class="film-strip">
@@ -15,7 +34,7 @@
                 <div class="card-front">
                     <div class="film-time">2026 / 03 / 14</div>
                     <div class="img-content">
-                        <img src="/images/board/pjw1.jpg"> </div>
+                        <img src="/images/board/本杰明谢幕.jpg"> </div>
                 </div>
                 <div class="card-back">
                     <p class="handwritten-text">这是横版照片的留言。<br>胶片框会自动变宽。 </p>
@@ -28,7 +47,7 @@
                 <div class="card-front">
                     <div class="film-time">2026 / 03 / 15</div>
                     <div class="img-content">
-                        <img src="/images/board/1002解设.jpg"> </div>
+                        <img src="/images/board/maxi.jpg"> </div>
                 </div>
                 <div class="card-back">
                     <p class="handwritten-text">这是竖版照片的留言。<br>胶片框会自动变窄贴合图片。</p>
@@ -41,5 +60,46 @@
 
 <script src="/js/music.js"></script>
 
+<script>
+window.addEventListener('load', () => {
+    const tl = gsap.timeline();
+
+    // 1. 初始化状态：HC 贴在一起，向下偏移
+    gsap.set(".main", { opacity: 0, y: 20 });
+    gsap.set(".mask", { width: 0 });
+
+    // 2. 依次浮现 H 和 C
+    tl.to(".main", {
+        opacity: 1, y: 0,
+        duration: 1, stagger: 0.2,
+        ease: "power2.out"
+    })
+
+    // 3. 【重点】向两边推开，同时文字“流”出来
+    // 这里使用 expo.inOut 曲线，它是视频里那种丝滑感的来源
+    .to(".spacer", {
+        width: "20px", // Hcver 和 Chen 展开后的间距
+        duration: 2,
+        ease: "expo.inOut"
+    }, "+=0.3")
+    
+    .to(".mask", {
+        width: "auto", // 遮罩打开，文字露出来
+        duration: 2,
+        ease: "expo.inOut"
+    }, "<") // 与 spacer 动画同步
+
+    // 4. 整体稍微停顿，然后渐隐并开门
+    .to(".loader-container", {
+        opacity: 0, scale: 1.05,
+        duration: 1, ease: "power2.in"
+    }, "+=1.2")
+
+    .to(".door-left", { xPercent: -100, duration: 1.6, ease: "expo.inOut" }, "-=0.5")
+    .to(".door-right", { xPercent: 100, duration: 1.6, ease: "expo.inOut" }, "<")
+
+    .set("#loader", { display: "none" });
+});
+</script>
 </body>
 </html>
