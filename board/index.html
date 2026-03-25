@@ -9,19 +9,32 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-<div id="loader" class="door-loader">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<div id="loader" class="preloader_container">
     <div class="door-left"></div>
     <div class="door-right"></div>
     
-    <div class="loader-container">
-        <div class="group" id="groupL">
-            <span class="main">H</span>
-            <div class="mask"><span class="sub">cver</span></div>
+    <div class="preloader_gspContainer">
+        <div class="word_unit">
+            <span class="letter_main">H</span>
+            <span class="expand_text">
+                <span class="letter_child">c</span>
+                <span class="letter_child">v</span>
+                <span class="letter_child">e</span>
+                <span class="letter_child">r</span>
+            </span>
         </div>
-        <div class="spacer"></div>
-        <div class="group" id="groupR">
-            <span class="main">C</span>
-            <div class="mask"><span class="sub">hen</span></div>
+        
+        <div class="word_spacer"></div>
+
+        <div class="word_unit">
+            <span class="letter_main">C</span>
+            <span class="expand_text">
+                <span class="letter_child">h</span>
+                <span class="letter_child">e</span>
+                <span class="letter_child">n</span>
+            </span>
         </div>
     </div>
 </div>
@@ -64,38 +77,50 @@
 window.addEventListener('load', () => {
     const tl = gsap.timeline();
 
-    // 1. 初始化状态：HC 贴在一起，向下偏移
-    gsap.set(".main", { opacity: 0, y: 20 });
-    gsap.set(".mask", { width: 0 });
+    // 1. 初始化：让 H 和 C 靠得极近
+    gsap.set("#unitL", { x: 30 });
+    gsap.set("#unitR", { x: -30 });
 
-    // 2. 依次浮现 H 和 C
-    tl.to(".main", {
-        opacity: 1, y: 0,
-        duration: 1, stagger: 0.2,
-        ease: "power2.out"
+    // 2. H 和 C 淡淡浮现
+    tl.to(".letter_main", {
+        opacity: 1,
+        duration: 1.5,
+        stagger: 0.4,
+        ease: "power2.inOut"
     })
 
-    // 3. 【重点】向两边推开，同时文字“流”出来
-    // 这里使用 expo.inOut 曲线，它是视频里那种丝滑感的来源
-    .to(".spacer", {
-        width: "20px", // Hcver 和 Chen 展开后的间距
-        duration: 2,
+    // 3. 核心位移：左右游开 + 字母像墨水一样流出来
+    // 这里用 expo.inOut 曲线，模拟视频里那种高级的呼吸感
+    .to(["#unitL", "#unitR"], {
+        x: (i) => i === 0 ? -25 : 25, // 往两边拉开的距离
+        duration: 2.2,
         ease: "expo.inOut"
-    }, "+=0.3")
-    
-    .to(".mask", {
-        width: "auto", // 遮罩打开，文字露出来
-        duration: 2,
+    }, "+=0.2")
+
+    .to(".expand_text", {
+        width: "auto",
+        opacity: 1,
+        duration: 2.2,
         ease: "expo.inOut"
-    }, "<") // 与 spacer 动画同步
+    }, "<") // 与位移同步
 
-    // 4. 整体稍微停顿，然后渐隐并开门
-    .to(".loader-container", {
-        opacity: 0, scale: 1.05,
-        duration: 1, ease: "power2.in"
-    }, "+=1.2")
+    .to(".letter_child", {
+        x: 0,
+        stagger: 0.08, // 每个字母错开一点点，形成流动感
+        duration: 1.5,
+        ease: "power2.out"
+    }, "<0.2") // 在位移开始后0.2秒启动字母拉伸
 
-    .to(".door-left", { xPercent: -100, duration: 1.6, ease: "expo.inOut" }, "-=0.5")
+    // 4. 整体渐隐并开门
+    .to(".preloader_gspContainer", {
+        opacity: 0,
+        filter: "blur(15px)",
+        scale: 1.1,
+        duration: 1.2,
+        ease: "power2.inOut"
+    }, "+=1")
+
+    .to(".door-left", { xPercent: -100, duration: 1.6, ease: "expo.inOut" }, "-=0.6")
     .to(".door-right", { xPercent: 100, duration: 1.6, ease: "expo.inOut" }, "<")
 
     .set("#loader", { display: "none" });

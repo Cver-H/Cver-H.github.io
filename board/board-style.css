@@ -1,3 +1,10 @@
+@font-face {
+  font-family: '5'; /* 我们给这套字体起个代号 */
+  src: url('../fonts/LaBelleAurore-Regular.woff2'); /* 告诉 CSS 去哪里找这个文件，注意这里的文件名必须和你下载的一模一样 */
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* 全局基础设置 */
 body {
     margin: 0;
@@ -138,36 +145,66 @@ body {
 /* 隐藏滚动条 */
 .handwritten-text::-webkit-scrollbar { width: 0; }
 
-.door-loader {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: 9999; background: #000; display: flex; justify-content: center; align-items: center;
+.preloader_container {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh;
+    /* --- 核心修改：这里设为 transparent，不要背景色 --- */
+    background: transparent; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    z-index: 9999; 
+    /* 必须加这个，防止门拉开后出现水平滚动条 */
+    overflow: hidden; 
 }
+
+/* 门才是真正的黑色遮罩 */
 .door-left, .door-right {
-    position: absolute; width: 50.5%; height: 100%; background: #000; z-index: 1;
-}
-.door-left { left: 0; } .door-right { right: 0; }
-
-.loader-container {
-    display: flex; z-index: 10; align-items: baseline;
-    font-family: 'Inter', -apple-system, sans-serif;
-}
-
-.group { display: flex; align-items: baseline; }
-
-.main {
-    font-size: 2.2rem; color: #fff; font-weight: 300;
-    line-height: 1; position: relative; z-index: 2;
+    position: absolute; 
+    width: 50.5%; 
+    height: 100%; 
+    background: #000; 
+    z-index: 1; /* 门在底层 */
+    top: 0;
+    /* 删掉这里的 transition，全部交给 GSAP 控制 */
 }
 
-/* 核心：用 mask 实现文字流出感 */
-.mask {
-    overflow: hidden; width: 0; display: flex; align-items: baseline;
+.door-left { left: 0; }
+.door-right { right: 0; }
+
+.preloader_gspContainer {
+    display: flex; align-items: baseline; z-index: 10;
+    font-family: '5', cursive; /* 使用指定字体 */
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+}
+.word_unit { display: flex; align-items: baseline; position: relative; }
+
+.letter_main {
+    font-size: 3.5rem; /* 手写体字号要大一点才显眼 */
+    line-height: 1;
+    opacity: 0;
+    position: relative;
+    z-index: 2;
 }
 
-.sub {
-    font-size: 1.6rem; color: #fff; font-weight: 300;
-    white-space: nowrap; padding-left: 4px; /* 字母间的微小呼吸间距 */
+.expand_text {
+    display: flex;
+    align-items: baseline;
+    overflow: hidden;
+    width: 0; /* 初始完全隐藏 */
+    opacity: 0;
 }
 
-/* 初始时两组字母之间的距离，JS 会动这个值 */
-.spacer { width: 0px; }
+.letter_child {
+    font-size: 2.8rem;
+    white-space: nowrap;
+    display: inline-block;
+    padding-left: 2px;
+    transform: translateX(-15px); /* 初始藏在首字母后面 */
+}
+
+.word_spacer { width: 0px; transition: width 2s; }
