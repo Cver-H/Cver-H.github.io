@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>portfolio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap');
+
+/* ── 字体同步主站 ── */
+@font-face { font-family: '1'; src: url('../fonts/chenyuluoyan.woff2'); }
+@font-face { font-family: '4'; src: url('../fonts/汇文明朝体.woff2'); }
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink:   #0e0e0e;
+  --paper: #f5f4f0;
+  --mid:   #888;
+  --line:  rgba(14,14,14,0.12);
+  --accent:#0e0e0e;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── 自定义光标 ── */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, opacity 0.2s;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.4s cubic-bezier(.23,1,.32,1), width 0.3s, height 0.3s, opacity 0.3s;
+  transform: translate(-50%, -50%);
+}
+body:has(a:hover) .cursor-ring,
+body:has(.work-item:hover) .cursor-ring {
+  width: 60px; height: 60px;
+  border-color: var(--ink);
+  opacity: 0.4;
+}
+
+/* ── 顶部导航 ── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 28px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  mix-blend-mode: normal;
+}
+
+.logo {
+  font-family: '1', cursive, serif;
+  font-size: 1.6rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+nav {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+
+nav a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--ink); }
+
+/* ── Hero ── */
+.hero {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 48px 80px;
+  border-right: 1px solid var(--line);
+}
+
+.hero-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 28px;
+}
+
+.hero-title {
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--mid);
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 48px 80px;
+}
+
+.hero-desc {
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.9;
+  color: #555;
+  max-width: 340px;
+  margin-bottom: 40px;
+}
+
+.scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.scroll-line {
+  width: 40px;
+  height: 1px;
+  background: var(--mid);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: var(--ink);
+  animation: scanline 2.4s ease-in-out infinite;
+}
+@keyframes scanline { 0%,100%{left:-100%} 50%{left:100%} }
+
+/* 右下角页码 */
+.hero-count {
+  position: absolute;
+  right: 48px; top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--mid);
+  transform-origin: right center;
+}
+
+/* ── 分隔线组件 ── */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+/* ── 作品列表区 ── */
+.works-section {
+  padding: 0 48px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 48px 0 32px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+}
+
+/* ── 单个作品行 ── */
+.work-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto auto;
+  align-items: center;
+  gap: 32px;
+  padding: 36px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: padding-left 0.5s cubic-bezier(.23,1,.32,1);
+}
+
+.work-item::before {
+  content: '';
+  position: absolute;
+  left: -100%; top: 0;
+  width: 100%; height: 100%;
+  background: var(--ink);
+  transition: left 0.6s cubic-bezier(.23,1,.32,1);
+  z-index: 0;
+}
+
+.work-item:hover::before { left: 0; }
+
+.work-item > * { position: relative; z-index: 1; transition: color 0.3s; }
+.work-item:hover .work-index,
+.work-item:hover .work-title,
+.work-item:hover .work-category,
+.work-item:hover .work-year { color: var(--paper); }
+
+.work-index {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  letter-spacing: 0.1em;
+}
+
+.work-main {}
+
+.work-title {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.work-sub {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--mid);
+  font-style: italic;
+}
+.work-item:hover .work-sub { color: rgba(245,244,240,0.6); }
+
+.work-category {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+}
+.work-item:hover .work-category { border-color: rgba(255,255,255,0.3); }
+
+.work-year {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--mid);
+  min-width: 50px;
+  text-align: right;
+}
+
+/* ── 悬停图片预览 ── */
+.preview-img {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  width: 240px;
+  height: 160px;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  filter: grayscale(100%);
+  mix-blend-mode: multiply;
+}
+.preview-img.visible { opacity: 0.85; }
+
+/* ── 关于区 ── */
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 60vh;
+  border-top: 1px solid var(--line);
+  margin-top: 80px;
+}
+
+.about-left {
+  padding: 80px 48px;
+  border-right: 1px solid var(--line);
+}
+
+.about-heading {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 40px;
+}
+
+.about-heading em { font-style: italic; color: var(--mid); }
+
+.about-text {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 2;
+  color: #555;
+  max-width: 380px;
+}
+
+.about-right {
+  padding: 80px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.skills-list {
+  list-style: none;
+}
+
+.skills-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+.skill-bar-wrap {
+  width: 100px;
+  height: 1px;
+  background: var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-bar {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  background: var(--ink);
+  width: 0;
+  transition: width 1.2s cubic-bezier(.23,1,.32,1);
+}
+
+/* ── 联系区 ── */
+.contact-section {
+  padding: 120px 48px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 40px;
+}
+
+.contact-big {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.contact-big em { font-style: italic; color: var(--mid); }
+
+.contact-links {
+  display: flex;
+  gap: 40px;
+}
+
+.contact-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+.contact-link::after {
+  content: '↗';
+  font-style: normal;
+  transition: transform 0.2s;
+}
+.contact-link:hover { color: var(--ink); }
+.contact-link:hover::after { transform: translate(2px, -2px); }
+
+/* ── 页脚 ── */
+footer {
+  padding: 24px 48px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--mid);
+}
+
+/* ── 入场动画 ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.23,1,.32,1);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(30px); }
+  to   { opacity:1; transform:none; }
+}
+
+.hero-label { animation: fadeUp 1s ease 0.2s both; }
+.hero-title { animation: fadeUp 1s ease 0.4s both; }
+.hero-desc  { animation: fadeUp 1s ease 0.7s both; }
+.scroll-hint { animation: fadeUp 1s ease 1s both; }
+</style>
+</head>
+<body>
+
+<!-- 光标 -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- 悬停预览图（灰度）-->
+<img class="preview-img" id="preview-img" src="" alt="">
+
+<!-- 导航 -->
+<header>
+  <a href="/" class="logo">CHEN</a>
+  <nav>
+    <a href="/">主页</a>
+    <a href="/photos">摄影</a>
+    <a href="/write">随写</a>
+    <a href="/aboutme">关于</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-label">Portfolio — 作品集</p>
+    <h1 class="hero-title">
+      Selected<br>
+      <em>Works</em>
+    </h1>
+  </div>
+  <div class="hero-right">
+    <p class="hero-desc">
+      设计、摄影、开发——<br>
+      以克制的形式<br>
+      承载真实的表达。
+    </p>
+    <div class="scroll-hint">
+      <span class="scroll-line"></span>
+      <span>向下探索</span>
+    </div>
+  </div>
+  <div class="hero-count">2024 — 2026</div>
+</section>
+
+<!-- 作品列表 -->
+<section class="works-section">
+  <div class="section-head">
+    <span class="section-title">项目</span>
+    <span class="section-num">06 works</span>
+  </div>
+
+  <div class="work-item reveal"
+       data-preview="/images/portfolio/work1.jpg">
+    <span class="work-index">01</span>
+    <div class="work-main">
+      <h2 class="work-title">个人博客系统</h2>
+      <p class="work-sub">Hexo · Node.js · 自定义主题</p>
+    </div>
+    <span class="work-category">开发</span>
+    <span class="work-year">2025</span>
+  </div>
+
+  <div class="work-item reveal"
+       data-preview="/images/portfolio/work2.jpg">
+    <span class="work-index">02</span>
+    <div class="work-main">
+      <h2 class="work-title">胶片影像档案</h2>
+      <p class="work-sub">视觉叙事 · 黑白摄影</p>
+    </div>
+    <span class="work-category">摄影</span>
+    <span class="work-year">2025</span>
+  </div>
+
+  <div class="work-item reveal"
+       data-preview="/images/portfolio/work3.jpg">
+    <span class="work-index">03</span>
+    <div class="work-main">
+      <h2 class="work-title">品牌视觉系统</h2>
+      <p class="work-sub">Logo · 排版 · 色彩体系</p>
+    </div>
+    <span class="work-category">设计</span>
+    <span class="work-year">2024</span>
+  </div>
+
+  <div class="work-item reveal"
+       data-preview="/images/portfolio/work4.jpg">
+    <span class="work-index">04</span>
+    <div class="work-main">
+      <h2 class="work-title">交互装置实验</h2>
+      <p class="work-sub">WebGL · 粒子系统 · 音乐可视化</p>
+    </div>
+    <span class="work-category">实验</span>
+    <span class="work-year">2024</span>
+  </div>
+
+  <div class="work-item reveal"
+       data-preview="/images/portfolio/work5.jpg">
+    <span class="work-index">05</span>
+    <div class="work-main">
+      <h2 class="work-title">城市纪录</h2>
+      <p class="work-sub">街头摄影 · 光影研究</p>
+    </div>
+    <span class="work-category">摄影</span>
+    <span class="work-year">2026</span>
+  </div>
+
+  <div class="work-item reveal"
+       data-preview="/images/portfolio/work6.jpg">
+    <span class="work-index">06</span>
+    <div class="work-main">
+      <h2 class="work-title">动态海报系列</h2>
+      <p class="work-sub">After Effects · 动态排版</p>
+    </div>
+    <span class="work-category">动态</span>
+    <span class="work-year">2026</span>
+  </div>
+</section>
+
+<!-- 关于 -->
+<section class="about-section">
+  <div class="about-left reveal">
+    <h2 class="about-heading">
+      关于<br><em>这里</em>
+    </h2>
+    <p class="about-text">
+      我是尘，平面设计师/业余摄影师/前端代码开发者。<br>
+      希望每个人都能找到既定的结局<br>
+      
+    </p>
+  </div>
+  <div class="about-right reveal">
+    <ul class="skills-list">
+      <li>
+        <span>视觉设计</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="88"></div></div>
+      </li>
+      <li>
+        <span>摄影 / 后期</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="92"></div></div>
+      </li>
+      <li>
+        <span>前端开发</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="75"></div></div>
+      </li>
+      <li>
+        <span>动态设计</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="60"></div></div>
+      </li>
+      <li>
+        <span>文字创作</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" data-w="80"></div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 联系 -->
+<section class="contact-section reveal">
+  <h2 class="contact-big">
+    让我们<br><em>聊聊</em>
+  </h2>
+  <div class="contact-links">
+    <a class="contact-link" href="https://weibo.com/u/7565802663">微博</a>
+    <a class="contact-link" href="https://www.xiaohongshu.com/user/profile/652e6f42000000000201019e">小红书</a>
+    <a class="contact-link" href="/wechat">微信</a>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+  <span>© 2026 Cver's Blog</span>
+  <span>This is me</span>
+</footer>
+
+<script>
+/* ── 光标跟随 ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+});
+
+(function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+/* ── 悬停预览图跟随鼠标 ── */
+const previewEl = document.getElementById('preview-img');
+document.querySelectorAll('.work-item').forEach(item => {
+  const src = item.dataset.preview;
+  item.addEventListener('mouseenter', () => {
+    previewEl.src = src || '';
+    previewEl.classList.add('visible');
+  });
+  item.addEventListener('mousemove', e => {
+    previewEl.style.left = (e.clientX + 28) + 'px';
+    previewEl.style.top  = (e.clientY - 80) + 'px';
+  });
+  item.addEventListener('mouseleave', () => {
+    previewEl.classList.remove('visible');
+  });
+});
+
+/* ── Intersection Observer 入场 ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      /* 技能条 */
+      e.target.querySelectorAll('.skill-bar').forEach(bar => {
+        bar.style.width = bar.dataset.w + '%';
+      });
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
