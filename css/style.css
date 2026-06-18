@@ -961,4 +961,15 @@ body {
     border-color: #ffffff; /* 悬停时边框变绿，呼应你的主题色 */
 }
 
+/* 音乐播放页入口：用主题蓝跟其他社交图标区分开，常态也带一点点高亮，
+   不用额外准备图片，直接用内嵌 svg 音符图标 */
+.feature-item-music {
+    background: rgba(115, 208, 252, 0.18);
+    border-color: rgba(115, 208, 252, 0.45);
+    color: #73d0fc;
+}
 
+.feature-item-music:hover {
+    background: rgba(115, 208, 252, 0.35);
+    border-color: #73d0fc;
+}

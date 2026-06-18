@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>歌词播放器</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body style="background: #1e1e24; margin: 0; padding: 40px 0;">
+
+  <h2 class="sr-only" style="display:none;">Cver's Dynamic Lyric Player</h2>
+
+  <div id="lyricContainer" style="position: relative; width: 100%; max-width: 600px; height: 520px; border-radius: 12px; overflow: hidden; background: #0a0b0d; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; transition: all 0.3s ease; margin: 0 auto;">
+
+    <div id="bgBlur" style="position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(40px) brightness(0.25); transform: scale(1.1); transition: background-image 0.8s ease; opacity: 0; pointer-events: none; z-index: 0;"></div>
+
+    <div style="padding: 14px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.06); z-index: 10;">
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="searchInput" placeholder="输入歌名或歌手，如：周杰伦 晴天" value="晴天" style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #fff; font-size: 14px; outline: none;">
+        <button id="searchBtn" style="padding: 0 16px; background: #31c27c; color: #fff; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 500;">搜索歌曲</button>
+        <button id="playlistToggleBtn" style="padding: 0 12px; background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 13px; cursor: pointer;" title="导入歌单">歌单</button>
+        <button id="cookieToggleBtn" style="padding: 0 12px; background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 13px; cursor: pointer;" title="设置登录 Cookie 以获取真实音源">登录</button>
+      </div>
+
+      <div id="cookiePanel" style="display: none; margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px;">
+        <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 8px; line-height: 1.6;">
+          在浏览器登录 y.qq.com 后，F12 → Application/存储 → Cookies，复制下面两个字段的值粘贴进来。这是你账号的登录凭证，只会保存在本地浏览器，不会上传到任何第三方。
+        </div>
+        <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+          <input type="text" id="uinInput" placeholder="uin（QQ号，纯数字）" style="flex: 1; padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; outline: none;">
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="keyInput" placeholder="qqmusic_key" style="flex: 1; padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; outline: none;">
+          <button id="saveCookieBtn" style="padding: 0 12px; background: #31c27c; color: #fff; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; white-space: nowrap;">保存</button>
+        </div>
+        <div id="cookieStatus" style="font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px;"></div>
+        <button id="checkLoginBtn" style="width: 100%; margin-top: 6px; padding: 6px; background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 11px; cursor: pointer;">检查当前登录状态</button>
+      </div>
+
+      <div id="playlistPanel" style="display: none; margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px;">
+        <div style="font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 8px; line-height: 1.6;">
+          打开 QQ 音乐网页版任意歌单页，链接里那串数字就是歌单 ID（如 y.qq.com/n/ryqq/playlist/<b>8275146122</b>）。导入「我创建的歌单」需要先在上方完成登录配置。
+        </div>
+        <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+          <input type="text" id="playlistIdInput" placeholder="歌单 ID" style="flex: 1; padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; outline: none;">
+          <button id="importPlaylistBtn" style="padding: 0 12px; background: #31c27c; color: #fff; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; white-space: nowrap;">导入</button>
+        </div>
+        <button id="loadMyPlaylistsBtn" style="width: 100%; padding: 6px; background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 12px; cursor: pointer;">读取我创建的歌单（需先登录）</button>
+        <div id="playlistStatus" style="font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px;"></div>
+        <div id="playlistSongList" style="margin-top: 6px; max-height: 180px; overflow-y: auto;"></div>
+      </div>
+
+      <div id="searchResultWrapper" style="display: none; position: absolute; left: 14px; right: 14px; top: 58px; max-height: 220px; background: #16181c; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 20;">
+        <div id="searchResultList"></div>
+      </div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 32px; position: relative; z-index: 1;">
+      <div id="statusLabel" style="position: absolute; top: 12px; color: rgba(255,255,255,0.3); font-size: 12px; text-align: center; width: 100%;"></div>
+
+      <div id="lyricLine" style="font-size: var(--lyric-font-size, 24px); font-weight: 500; color: #ffffff; text-align: center; line-height: 1.6; min-height: 3.5em; letter-spacing: 0.5px; display: flex; flex-direction: column; justify-content: center; gap: 12px; width: 100%; transition: font-size 0.3s ease;">
+        在上方搜索一首歌曲开始吧
+      </div>
+    </div>
+
+    <div style="padding: 8px 14px 0; z-index: 10;">
+      <input type="range" id="seekSlider" min="0" max="1000" value="0" disabled
+        style="width: 100%; height: 4px; -webkit-appearance: none; appearance: none; background: rgba(255,255,255,0.15); border-radius: 2px; outline: none; cursor: pointer;">
+    </div>
+
+    <div style="padding: 14px; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.04); z-index: 10; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+        <button id="prevBtn" style="width: 36px; height: 36px; padding: 0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer;" aria-label="上一首" title="上一首" disabled>
+          <i class="ti ti-player-track-prev" style="color: rgba(255,255,255,0.3);" aria-hidden="true"></i>
+        </button>
+        <button id="playBtn" style="width: 36px; height: 36px; padding: 0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer;" aria-label="播放/暂停" disabled>
+          <i class="ti ti-player-play" id="playIcon" style="color: rgba(255,255,255,0.3);" aria-hidden="true"></i>
+        </button>
+        <button id="nextBtn" style="width: 36px; height: 36px; padding: 0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer;" aria-label="下一首" title="下一首" disabled>
+          <i class="ti ti-player-track-next" style="color: rgba(255,255,255,0.3);" aria-hidden="true"></i>
+        </button>
+        <button id="playModeBtn" style="width: 36px; height: 36px; padding: 0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer;" aria-label="列表循环" title="列表循环">
+          <i class="ti ti-repeat" id="playModeIcon" style="color: rgba(255,255,255,0.75);" aria-hidden="true"></i>
+        </button>
+        <span style="font-size: 12px; color: rgba(255,255,255,0.5); min-width: 90px; flex-shrink: 0;" id="timeLabel">00:00 / 00:00</span>
+        <span id="audioBadge" style="font-size: 11px; color: rgba(255,255,255,0.35); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span>
+      </div>
+
+      <button id="fullscreenBtn" style="height: 36px; padding: 0 12px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 6px; cursor: pointer; color: #fff; font-size: 13px;">
+        <i class="ti ti-maximize" id="fullscreenIcon"></i>
+        <span id="fullscreenText">全屏模式</span>
+      </button>
+    </div>
+  </div>
+
+  <audio id="audioEl" preload="auto" style="display:none;"></audio>
+
+  <script>
+  (function(){
+    // 对应本地 QQMusicApi 服务端口，跑 yarn start 后默认是 3300
+    const API_HOST = location.hostname && location.hostname !== '' ? location.hostname : 'localhost';
+    const API_BASE = `https://qqmusicapi-fdlw.onrender.com`;
+
+    const container = document.getElementById('lyricContainer');
+    const bgBlur = document.getElementById('bgBlur');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const cookieToggleBtn = document.getElementById('cookieToggleBtn');
+    const cookiePanel = document.getElementById('cookiePanel');
+    const uinInput = document.getElementById('uinInput');
+    const keyInput = document.getElementById('keyInput');
+    const saveCookieBtn = document.getElementById('saveCookieBtn');
+    const cookieStatus = document.getElementById('cookieStatus');
+    const checkLoginBtn = document.getElementById('checkLoginBtn');
+    const playlistToggleBtn = document.getElementById('playlistToggleBtn');
+    const playlistPanel = document.getElementById('playlistPanel');
+    const playlistIdInput = document.getElementById('playlistIdInput');
+    const importPlaylistBtn = document.getElementById('importPlaylistBtn');
+    const loadMyPlaylistsBtn = document.getElementById('loadMyPlaylistsBtn');
+    const playlistStatus = document.getElementById('playlistStatus');
+    const playlistSongList = document.getElementById('playlistSongList');
+    const searchResultWrapper = document.getElementById('searchResultWrapper');
+    const searchResultList = document.getElementById('searchResultList');
+    const statusLabel = document.getElementById('statusLabel');
+    const lyricEl = document.getElementById('lyricLine');
+    const prevBtn = document.getElementById('prevBtn');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const nextBtn = document.getElementById('nextBtn');
+    const playModeBtn = document.getElementById('playModeBtn');
+    const playModeIcon = document.getElementById('playModeIcon');
+    const seekSlider = document.getElementById('seekSlider');
+    const timeLabel = document.getElementById('timeLabel');
+    const audioBadge = document.getElementById('audioBadge');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const fullscreenIcon = document.getElementById('fullscreenIcon');
+    const fullscreenText = document.getElementById('fullscreenText');
+    const audioEl = document.getElementById('audioEl');
+
+    let playing = false;
+    let lines = [];
+    let totalDur = 0;
+    let currentLineText = '';
+    let animationFrameId = null;
+
+    // 是否拿到了真实可播放的音频地址。拿不到时退化为「纯计时器跑歌词」模式，
+    // 这种情况下点击播放不会出声音，只是歌词按估算时长滚动，适合你自己外部放歌做视觉同步用。
+    // 用 performance.now() 而不是 AudioContext.currentTime 来计时，
+    // 因为后者是只读、单向流逝的时间戳，没法支持拖动进度条跳转；
+    // performance.now() 配合「记录起点」的方式可以随意重新定位。
+    let hasRealAudio = false;
+    let fallbackStartPerf = 0;
+    let fallbackPauseTime = 0;
+
+    let isDraggingSeek = false;
+    let playlistTracks = [];
+    let currentPlaylistIndex = -1;
+    const playModes = ['list', 'single', 'random'];
+    let playMode = readStoredValue('lyricPlayerMode') || 'list';
+    let autoPlayWhenReady = false;
+
+    function setBrowserCookie(name, value, days = 365) {
+      try {
+        const expires = new Date(Date.now() + days * 86400000).toUTCString();
+        document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+      } catch (err) {}
+      try {
+        localStorage.setItem(name, value);
+      } catch (err) {}
+    }
+
+    function getBrowserCookie(name) {
+      try {
+        const key = `${encodeURIComponent(name)}=`;
+        const item = document.cookie.split('; ').find(row => row.startsWith(key));
+        if (item) return decodeURIComponent(item.slice(key.length));
+      } catch (err) {}
+      return '';
+    }
+
+    function readStoredValue(name) {
+      try {
+        return getBrowserCookie(name) || localStorage.getItem(name) || '';
+      } catch (err) {
+        return getBrowserCookie(name) || '';
+      }
+    }
+
+    function saveJsonValue(name, value) {
+      const text = JSON.stringify(value);
+      setBrowserCookie(name, text);
+    }
+
+    function readJsonValue(name, fallback) {
+      const text = readStoredValue(name);
+      if (!text) return fallback;
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        return fallback;
+      }
+    }
+
+    (function restoreSavedState() {
+      const lastUin = readStoredValue('lastUin');
+      const lastKey = readStoredValue('lastQqmusicKey');
+      if (lastUin) uinInput.value = lastUin;
+      if (lastKey) keyInput.value = lastKey;
+
+      const savedPlaylist = readJsonValue('savedLyricPlaylist', null);
+      if (savedPlaylist && Array.isArray(savedPlaylist.songs) && savedPlaylist.songs.length) {
+        playlistIdInput.value = savedPlaylist.id || '';
+        setActivePlaylist(savedPlaylist.songs, savedPlaylist.name || '上次导入的歌单', false);
+        playlistStatus.textContent = `已恢复《${savedPlaylist.name || '上次导入的歌单'}》共 ${savedPlaylist.songs.length} 首`;
+      }
+
+      updatePlayModeButton();
+      if (lastUin && lastKey) {
+        syncLoginCookie(lastUin, lastKey, false);
+      }
+    })();
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#searchInput') && !e.target.closest('#searchResultWrapper')) {
+        searchResultWrapper.style.display = 'none';
+      }
+    });
+
+    cookieToggleBtn.addEventListener('click', () => {
+      cookiePanel.style.display = cookiePanel.style.display === 'none' ? 'block' : 'none';
+      playlistPanel.style.display = 'none';
+    });
+
+    playlistToggleBtn.addEventListener('click', () => {
+      playlistPanel.style.display = playlistPanel.style.display === 'none' ? 'block' : 'none';
+      cookiePanel.style.display = 'none';
+    });
+
+    // 按歌单 ID 导入：对应 QQ 音乐网页版歌单链接里的那串数字
+    importPlaylistBtn.addEventListener('click', async () => {
+      const id = playlistIdInput.value.trim();
+      if (!id) {
+        playlistStatus.textContent = '请输入歌单 ID';
+        return;
+      }
+      playlistStatus.textContent = '正在导入歌单...';
+      playlistSongList.innerHTML = '';
+      try {
+        const res = await fetch(`${API_BASE}/songlist/?id=${id}`, { credentials: 'include' });
+        const json = await res.json();
+        if (json.result !== 100 || !json.data) {
+          playlistStatus.textContent = json.errMsg || '歌单导入失败';
+          return;
+        }
+        // 不同接口返回的歌曲列表字段名腾讯那边并不统一，这里做兼容查找。
+        // 实在找不到的话把原始结构打到 console，方便对照字段。
+        const songs = json.data.songlist || json.data.songInfoList || json.data.list || [];
+        if (songs.length === 0) {
+          console.log('歌单原始返回结构：', json.data);
+          playlistStatus.textContent = '歌单内未解析出歌曲列表，已在控制台打印原始数据，可贴给我核对字段名';
+          return;
+        }
+        const playlistName = json.data.dissname || json.data.dirname || '歌单';
+        setActivePlaylist(songs, playlistName, true, id);
+        playlistStatus.textContent = `《${playlistName}》共 ${songs.length} 首，已保存到浏览器`;
+      } catch (err) {
+        playlistStatus.textContent = '导入失败，请确认 3300 服务正在运行';
+      }
+    });
+
+    // 读取登录账号自己创建的歌单列表（不是歌单里的歌曲，是「有哪些歌单」这一层）
+    loadMyPlaylistsBtn.addEventListener('click', async () => {
+      const uin = uinInput.value.trim() || readStoredValue('lastUin');
+      if (!uin) {
+        playlistStatus.textContent = '请先在「登录」面板填写并保存 uin';
+        return;
+      }
+      playlistStatus.textContent = '正在读取我的歌单...';
+      playlistSongList.innerHTML = '';
+      try {
+        const res = await fetch(`${API_BASE}/user/songlist?id=${uin}`, { credentials: 'include' });
+        const json = await res.json();
+        if (json.result !== 100 || !json.data || !json.data.list) {
+          playlistStatus.textContent = json.errMsg || '读取失败，可能未登录或登录已过期';
+          return;
+        }
+        playlistSongList.innerHTML = '';
+        json.data.list.forEach(diss => {
+          const div = document.createElement('div');
+          div.style.padding = '8px 10px';
+          div.style.cursor = 'pointer';
+          div.style.color = '#ccc';
+          div.style.fontSize = '12px';
+          div.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
+          div.textContent = `${diss.diss_name || diss.dirname || '未命名歌单'}（${diss.song_cnt || diss.songnum || 0} 首）`;
+          div.addEventListener('mouseenter', () => div.style.background = 'rgba(255,255,255,0.05)');
+          div.addEventListener('mouseleave', () => div.style.background = 'transparent');
+          div.addEventListener('click', () => {
+            playlistIdInput.value = diss.tid || diss.dirid || '';
+            importPlaylistBtn.click();
+          });
+          playlistSongList.appendChild(div);
+        });
+        playlistStatus.textContent = `共 ${json.data.list.length} 个歌单，点击可查看其中歌曲`;
+      } catch (err) {
+        playlistStatus.textContent = '读取失败，请确认 3300 服务正在运行';
+      }
+    });
+
+    function normalizeSong(song) {
+      const songmid = song.songmid || song.mid || song.songMid || (song.songInfo && song.songInfo.mid);
+      const songname = song.songname || song.name || song.title || (song.songInfo && song.songInfo.name) || '未知歌曲';
+      const singerArr = song.singer || song.singers || [];
+      const singers = Array.isArray(singerArr) ? singerArr.map(s => s.name).join('/') : (singerArr || '未知歌手');
+      const albummid = song.albummid || (song.album && song.album.mid) || '';
+      const coverUrl = albummid ? `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albummid}.jpg` : '';
+      return { songmid, songname, singers, coverUrl };
+    }
+
+    function setActivePlaylist(songs, name, shouldSave, id = playlistIdInput.value.trim()) {
+      playlistTracks = songs.map(normalizeSong).filter(song => song.songmid);
+      currentPlaylistIndex = -1;
+      renderPlaylistSongs(playlistTracks);
+      updatePlaylistControls();
+      if (shouldSave) {
+        saveJsonValue('savedLyricPlaylist', { id, name, songs: playlistTracks });
+      }
+    }
+
+    function renderPlaylistSongs(songs) {
+      playlistSongList.innerHTML = '';
+      songs.forEach((song, index) => {
+        const normalized = song.songmid ? song : normalizeSong(song);
+        const div = document.createElement('div');
+        div.style.padding = '8px 10px';
+        div.style.cursor = normalized.songmid ? 'pointer' : 'default';
+        div.style.color = normalized.songmid ? '#ccc' : 'rgba(255,255,255,0.3)';
+        div.style.fontSize = '12px';
+        div.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
+        div.innerHTML = `<strong style="color:#fff;">${normalized.songname}</strong> - <span style="color:rgba(255,255,255,0.5);">${normalized.singers}</span>`;
+
+        if (normalized.songmid) {
+          div.addEventListener('mouseenter', () => div.style.background = 'rgba(255,255,255,0.05)');
+          div.addEventListener('mouseleave', () => div.style.background = 'transparent');
+          div.addEventListener('click', () => {
+            playlistPanel.style.display = 'none';
+            playPlaylistIndex(index);
+          });
+        }
+
+        playlistSongList.appendChild(div);
+      });
+    }
+
+    function updatePlaylistControls() {
+      const canSwitch = playlistTracks.length > 0;
+      prevBtn.disabled = !canSwitch;
+      nextBtn.disabled = !canSwitch;
+      prevBtn.querySelector('i').style.color = canSwitch ? '#ffffff' : 'rgba(255,255,255,0.3)';
+      nextBtn.querySelector('i').style.color = canSwitch ? '#ffffff' : 'rgba(255,255,255,0.3)';
+    }
+
+    function playPlaylistIndex(index) {
+      if (!playlistTracks.length) return;
+      const safeIndex = (index + playlistTracks.length) % playlistTracks.length;
+      currentPlaylistIndex = safeIndex;
+      const song = playlistTracks[safeIndex];
+      loadSong(song.songmid, `${song.songname} - ${song.singers}`, song.coverUrl);
+    }
+
+    function getRandomPlaylistIndex() {
+      if (playlistTracks.length <= 1) return currentPlaylistIndex >= 0 ? currentPlaylistIndex : 0;
+      let nextIndex = currentPlaylistIndex;
+      while (nextIndex === currentPlaylistIndex) {
+        nextIndex = Math.floor(Math.random() * playlistTracks.length);
+      }
+      return nextIndex;
+    }
+
+    function playNextSong() {
+      if (!playlistTracks.length) return;
+      autoPlayWhenReady = playing;
+      if (playMode === 'random') {
+        playPlaylistIndex(getRandomPlaylistIndex());
+        return;
+      }
+      playPlaylistIndex(currentPlaylistIndex + 1);
+    }
+
+    function playPrevSong() {
+      if (!playlistTracks.length) return;
+      autoPlayWhenReady = playing;
+      if (playMode === 'random') {
+        playPlaylistIndex(getRandomPlaylistIndex());
+        return;
+      }
+      playPlaylistIndex(currentPlaylistIndex - 1);
+    }
+
+    function finishCurrentSong() {
+      if (playMode === 'single' && currentPlaylistIndex >= 0) {
+        autoPlayWhenReady = true;
+        playPlaylistIndex(currentPlaylistIndex);
+        return;
+      }
+      if (playlistTracks.length && currentPlaylistIndex >= 0) {
+        autoPlayWhenReady = true;
+        playNextSong();
+        return;
+      }
+      resetPlayer();
+      lyricEl.innerHTML = '播放结束';
+    }
+
+    function updatePlayModeButton() {
+      if (!playModes.includes(playMode)) playMode = 'list';
+      const config = {
+        list: { icon: 'ti ti-repeat', label: '列表循环' },
+        single: { icon: 'ti ti-repeat-once', label: '单曲循环' },
+        random: { icon: 'ti ti-arrows-shuffle', label: '随机播放' },
+      }[playMode];
+      playModeIcon.className = config.icon;
+      playModeBtn.title = config.label;
+      playModeBtn.setAttribute('aria-label', config.label);
+    }
+
+    // 关键点：cookie 是「源（origin）」级别的，浏览器不允许网页 JS 直接帮另一个域名（localhost:3300）设置 cookie。
+    // 唯一正确的方式是请求 3300 本身的一个接口，让 3300 用 res.cookie() 把 uin / qqmusic_key
+    // 种在 localhost:3300 这个源下面。之后所有发往 3300 的 fetch 只要带 credentials:'include'，
+    // 浏览器就会自动附带这两个 cookie，后端 req.cookies.uin 才能读到值。
+    // QQMusicApi 自带的 /user/setCookie 接口就是干这件事的，直接复用它，不用自己再造一个。
+    saveCookieBtn.addEventListener('click', async () => {
+      const uin = uinInput.value.trim();
+      const key = keyInput.value.trim();
+      if (!uin || !key) {
+        cookieStatus.textContent = '请把 uin 和 qqmusic_key 都填上';
+        return;
+      }
+      setBrowserCookie('lastUin', uin);
+      setBrowserCookie('lastQqmusicKey', key);
+      cookieStatus.textContent = '正在保存...';
+      await syncLoginCookie(uin, key, true);
+    });
+
+    async function syncLoginCookie(uin, key, showStatus) {
+      if (!uin || !key) return false;
+      if (showStatus) cookieStatus.textContent = '正在保存...';
+      try {
+        // 第一步：setCookie 只是把这串 cookie 解析后存进服务端的 allCookies.json 文件，
+        // 这一步本身不会让浏览器在 localhost:3300 这个源下真正持有 cookie。
+        const setRes = await fetch(`${API_BASE}/user/setCookie`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: `uin=${uin}; qqmusic_key=${key}; qm_keyst=${key}` })
+        });
+        const setJson = await setRes.json();
+        if (setJson.result !== 100) {
+          if (showStatus) cookieStatus.textContent = setJson.errMsg || '保存失败';
+          return false;
+        }
+
+        // 第二步：getCookie 才会真正调用 res.cookie() 把刚存的那份凭证种到 localhost:3300 这个源下，
+        // 之后所有带 credentials:'include' 的 fetch 才会自动附带这两个值。
+        const getRes = await fetch(`${API_BASE}/user/getCookie?id=${uin}`, { credentials: 'include' });
+        const getJson = await getRes.json();
+        if (getJson.result === 100) {
+          setBrowserCookie('lastUin', uin);
+          setBrowserCookie('lastQqmusicKey', key);
+          if (showStatus) cookieStatus.textContent = '登录信息已生效，并已保存到浏览器';
+          return true;
+        } else {
+          if (showStatus) cookieStatus.textContent = getJson.errMsg || '凭证写入失败，请检查 uin 是否填写正确';
+          return false;
+        }
+      } catch (err) {
+        if (showStatus) cookieStatus.textContent = '保存失败，请确认 3300 服务正在运行';
+        return false;
+      }
+    }
+
+    // 直接问服务端「你现在收到了我哪些 cookie」，这是排查登录失效最直接的办法，
+    // 不用猜是「没保存成功」还是「保存成功了但过期了」还是「浏览器没带上」。
+    checkLoginBtn.addEventListener('click', async () => {
+      cookieStatus.textContent = '正在检查...';
+      try {
+        const res = await fetch(`${API_BASE}/user/cookie`, { credentials: 'include' });
+        const json = await res.json();
+        const cookies = json.data || {};
+        console.log('服务端实际收到的 cookie：', cookies);
+        if (cookies.uin && (cookies.qqmusic_key || cookies.qm_keyst)) {
+          cookieStatus.textContent = `已登录，uin=${cookies.uin}（详情见控制台）`;
+        } else if (cookies.uin) {
+          cookieStatus.textContent = `只收到了 uin，没收到 qqmusic_key，需要重新保存`;
+        } else {
+          cookieStatus.textContent = `服务端没收到任何登录 cookie，需要重新保存（详情见控制台）`;
+        }
+      } catch (err) {
+        cookieStatus.textContent = '检查失败，请确认 3300 服务正在运行';
+      }
+    });
+
+    searchBtn.addEventListener('click', async () => {
+      const key = searchInput.value.trim();
+      if (!key) return;
+
+      statusLabel.textContent = '正在搜索中...';
+      try {
+        const res = await fetch(`${API_BASE}/search?key=${encodeURIComponent(key)}`, { credentials: 'include' });
+        const json = await res.json();
+
+        if ((json.result === 0 || json.result === 100) && json.data && json.data.list) {
+          renderSearchResults(json.data.list);
+        } else {
+          statusLabel.textContent = json.errMsg || '未找到相关歌曲';
+        }
+      } catch (err) {
+        // fetch 直接 reject 基本就是两种情况：服务没起来，或者 CORS 被浏览器拦了
+        statusLabel.textContent = '搜索失败，请确认本地 3300 服务已启动且已开启 CORS（见下方说明）';
+      }
+    });
+
+    function renderSearchResults(songs) {
+      searchResultList.innerHTML = '';
+
+      songs.slice(0, 8).forEach(song => {
+        const singers = song.singer ? song.singer.map(s => s.name).join('/') : '未知歌手';
+        const coverUrl = song.albummid ? `https://y.gtimg.cn/music/photo_new/T002R300x300M000${song.albummid}.jpg` : '';
+
+        const div = document.createElement('div');
+        div.style.padding = '10px 12px';
+        div.style.cursor = 'pointer';
+        div.style.color = '#ccc';
+        div.style.fontSize = '13px';
+        div.style.borderBottom = '1px solid rgba(255,255,255,0.03)';
+        div.style.transition = 'background 0.2s';
+
+        div.innerHTML = `<strong style="color: #fff;">${song.songname || song.title}</strong> - <span style="color: rgba(255,255,255,0.5);">${singers}</span>`;
+
+        div.addEventListener('mouseenter', () => div.style.background = 'rgba(255,255,255,0.05)');
+        div.addEventListener('mouseleave', () => div.style.background = 'transparent');
+
+        div.addEventListener('click', () => {
+          searchResultWrapper.style.display = 'none';
+          loadSong(song.songmid, `${song.songname || song.title} - ${singers}`, coverUrl);
+        });
+
+        searchResultList.appendChild(div);
+      });
+
+      searchResultWrapper.style.display = 'block';
+      statusLabel.textContent = '';
+    }
+
+    // 同时尝试拉真实播放地址 + 歌词。两者互不阻塞，播放地址拿不到也不影响歌词模式可用。
+    async function loadSong(songmid, songInfoStr, coverUrl) {
+      statusLabel.textContent = `正在加载《${songInfoStr}》...`;
+      resetPlayer();
+
+      if (coverUrl) {
+        bgBlur.style.backgroundImage = `url(${coverUrl})`;
+        bgBlur.style.opacity = '1';
+      } else {
+        bgBlur.style.opacity = '0';
+      }
+
+      const lyricPromise = loadLyric(songmid);
+      const audioPromise = tryLoadAudio(songmid);
+
+      const [lyricOk] = await Promise.all([lyricPromise, audioPromise]);
+
+      if (lyricOk) {
+        statusLabel.textContent = `当前歌曲：《${songInfoStr}》`;
+        lyricEl.innerHTML = hasRealAudio ? '已就绪，点击左下角播放' : '歌词已就绪（无真实音源，按估算时长滚动）';
+        playBtn.disabled = false;
+        playIcon.style.color = '#ffffff';
+        seekSlider.disabled = false;
+        if (autoPlayWhenReady) {
+          autoPlayWhenReady = false;
+          startPlayback();
+        }
+      } else {
+        statusLabel.textContent = `《${songInfoStr}》歌词加载失败`;
+        autoPlayWhenReady = false;
+      }
+    }
+
+    async function loadLyric(songmid) {
+      try {
+        const res = await fetch(`${API_BASE}/lyric?songmid=${songmid}`, { credentials: 'include' });
+        const json = await res.json();
+
+        let lyricText = '';
+        if (json.data && typeof json.data.lyric === 'string') {
+          lyricText = json.data.lyric;
+        }
+
+        if (!lyricText) {
+          throw new Error(json.errMsg || '接口未返回歌词文本');
+        }
+
+        lines = parseLrc(lyricText);
+        if (lines.length === 0) {
+          throw new Error('歌词解析为空（可能是纯音乐或接口返回了非 LRC 格式）');
+        }
+
+        totalDur = lines[lines.length - 1].t + lines[lines.length - 1].d;
+        return true;
+      } catch (err) {
+        lyricEl.innerHTML = `歌词加载失败：${err.message}`;
+        return false;
+      }
+    }
+
+    // 拿真实播放地址。QQ音乐的 vkey 接口在没有登录 cookie 时经常拿不到有效地址，
+    // VIP 歌曲基本必失败，免费歌曲也不保证成功率 —— 这是接口本身的限制，不是代码 bug。
+    async function tryLoadAudio(songmid) {
+      hasRealAudio = false;
+      audioEl.removeAttribute('src');
+      audioBadge.textContent = '正在尝试获取音源...';
+      try {
+        const res = await fetch(`${API_BASE}/song/url?id=${songmid}&type=128`, { credentials: 'include' });
+        const json = await res.json();
+        if (json.result === 100 && json.data) {
+          audioEl.src = json.data;
+          hasRealAudio = true;
+          audioBadge.textContent = '已获取真实音源';
+          audioEl.addEventListener('loadedmetadata', () => {
+            if (isFinite(audioEl.duration) && audioEl.duration > totalDur) {
+              totalDur = audioEl.duration;
+              updateTimeLabel(audioEl.currentTime || 0);
+            }
+          }, { once: true });
+        } else {
+          audioBadge.textContent = '无音源（需登录/受版权限制），仅歌词同步';
+        }
+      } catch (err) {
+        audioBadge.textContent = '音源获取失败，仅歌词同步';
+      }
+    }
+
+    function parseLrc(lrcText) {
+      const cleanLrc = lrcText.replace(/&amp;/g, '&').replace(/&apos;/g, "'");
+      const rawLines = cleanLrc.split('\n');
+      const result = [];
+
+      for (let line of rawLines) {
+        const match = line.match(/\[(\d+):(\d+)[.:](\d+)\](.*)/);
+        if (match) {
+          const minutes = parseInt(match[1], 10);
+          const seconds = parseInt(match[2], 10);
+          const ms = parseInt(match[3], 10);
+
+          const time = minutes * 60 + seconds + (ms / (match[3].length === 3 ? 1000 : 100));
+          const text = match[4].trim();
+
+          if (text && !text.startsWith('作词') && !text.startsWith('作曲') && !text.startsWith('腾讯')) {
+            result.push({ t: time, text: text, d: 0 });
+          }
+        }
+      }
+
+      for (let i = 0; i < result.length; i++) {
+        if (i < result.length - 1) {
+          result[i].d = result[i + 1].t - result[i].t;
+        } else {
+          result[i].d = 5.0;
+        }
+      }
+
+      return result;
+    }
+
+    function resetPlayer() {
+      playing = false;
+      playBtn.disabled = true;
+      playIcon.style.color = 'rgba(255,255,255,0.3)';
+      playIcon.className = 'ti ti-player-play';
+      audioBadge.textContent = '';
+
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+      audioEl.pause();
+      audioEl.currentTime = 0;
+      fallbackPauseTime = 0;
+      currentLineText = '';
+      updateTimeLabel(0);
+      seekSlider.value = 0;
+      seekSlider.disabled = true;
+    }
+
+    function updateLyric(elapsed) {
+      let active = null;
+      for (const line of lines) {
+        if (elapsed >= line.t && elapsed < line.t + line.d) {
+          active = line;
+          break;
+        }
+      }
+
+      if (!active) {
+        if (currentLineText !== '') {
+          currentLineText = '';
+          lyricEl.style.opacity = '0';
+        }
+        return;
+      }
+
+      if (active.text !== currentLineText) {
+        currentLineText = active.text;
+        const subLines = active.text.split('//').join('\n').split('\\n').join('\n').split('\n');
+
+        lyricEl.innerHTML = subLines.map(lineStr => {
+          const charsHtml = lineStr.split('').map(ch => {
+            if (ch === ' ') {
+              // 空格不能用 inline-block 渲染，会被浏览器折叠成 0 宽度，
+              // 导致英文单词之间看起来粘在一起。用一个固定宽度的占位块代替。
+              return `<span class="l-char" data-is-spacer="1" style="display: inline-block; width: 0.3em; opacity: 1;"></span>`;
+            }
+            return `<span class="l-char" style="display: inline-block; opacity: 0; filter: blur(5px); transform: translateY(8px); transition: opacity 0.4s ease, transform 0.4s ease, filter 0.4s ease;">${ch}</span>`;
+          }).join('');
+          return `<div style="min-height: 1.2em;">${charsHtml}</div>`;
+        }).join('');
+
+        lyricEl.style.opacity = '1';
+      }
+
+      const progress = (elapsed - active.t) / active.d;
+      const allChars = lyricEl.querySelectorAll('.l-char');
+      const charsToShow = Math.min(allChars.length, Math.floor(progress * allChars.length * 1.5) + 1);
+
+      for (let i = 0; i < allChars.length; i++) {
+        if (i < charsToShow) {
+          allChars[i].style.opacity = '1';
+          allChars[i].style.transform = 'translateY(0)';
+          allChars[i].style.filter = 'blur(0px)';
+        } else if (!allChars[i].dataset.isSpacer) {
+          allChars[i].style.opacity = '0';
+          allChars[i].style.transform = 'translateY(8px)';
+          allChars[i].style.filter = 'blur(5px)';
+        }
+      }
+    }
+
+    function formatTime(secs) {
+      if (!isFinite(secs) || secs < 0) secs = 0;
+      return `${Math.floor(secs / 60).toString().padStart(2, '0')}:${Math.floor(secs % 60).toString().padStart(2, '0')}`;
+    }
+
+    function updateTimeLabel(elapsed) {
+      timeLabel.textContent = `${formatTime(elapsed)} / ${formatTime(totalDur)}`;
+    }
+
+    function getElapsed() {
+      if (hasRealAudio) {
+        return audioEl.currentTime;
+      }
+      return (performance.now() - fallbackStartPerf) / 1000;
+    }
+
+    function loop() {
+      if (!playing) return;
+
+      const elapsed = getElapsed();
+      if (!hasRealAudio && elapsed >= totalDur) {
+        finishCurrentSong();
+        return;
+      }
+
+      updateTimeLabel(elapsed);
+      updateLyric(elapsed);
+      if (!isDraggingSeek && totalDur > 0) {
+        seekSlider.value = (elapsed / totalDur) * 1000;
+      }
+
+      animationFrameId = requestAnimationFrame(loop);
+    }
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        if (container.requestFullscreen) container.requestFullscreen();
+        else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        container.style.maxWidth = '100%';
+        container.style.height = '100vh';
+        container.style.borderRadius = '0px';
+        container.style.setProperty('--lyric-font-size', '42px');
+        fullscreenIcon.className = 'ti ti-minimize';
+        fullscreenText.textContent = '退出全屏';
+      } else {
+        container.style.maxWidth = '600px';
+        container.style.height = '520px';
+        container.style.borderRadius = '12px';
+        container.style.setProperty('--lyric-font-size', '24px');
+        fullscreenIcon.className = 'ti ti-maximize';
+        fullscreenText.textContent = '全屏模式';
+      }
+    });
+
+    playBtn.addEventListener('click', function () {
+      if (!playing) {
+        startPlayback();
+      } else {
+        pausePlayback();
+      }
+    });
+
+    prevBtn.addEventListener('click', playPrevSong);
+    nextBtn.addEventListener('click', playNextSong);
+    playModeBtn.addEventListener('click', () => {
+      const nextModeIndex = (playModes.indexOf(playMode) + 1) % playModes.length;
+      playMode = playModes[nextModeIndex];
+      setBrowserCookie('lyricPlayerMode', playMode);
+      updatePlayModeButton();
+    });
+
+    audioEl.addEventListener('ended', finishCurrentSong);
+
+    function startPlayback() {
+      if (playBtn.disabled) return;
+      playing = true;
+      playIcon.className = 'ti ti-player-pause';
+
+      if (hasRealAudio) {
+        audioEl.currentTime = fallbackPauseTime || audioEl.currentTime;
+        audioEl.play().catch(err => {
+          // 浏览器自动播放策略或解码失败，回退到纯歌词模式
+          hasRealAudio = false;
+          audioBadge.textContent = '音频播放失败，已切换为纯歌词同步';
+          startFallbackClock();
+        });
+      } else {
+        startFallbackClock();
+      }
+
+      loop();
+    }
+
+    function pausePlayback() {
+      playing = false;
+      playIcon.className = 'ti ti-player-play';
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+      if (hasRealAudio) {
+        audioEl.pause();
+      } else {
+        fallbackPauseTime = (performance.now() - fallbackStartPerf) / 1000;
+      }
+    }
+
+    function startFallbackClock() {
+      fallbackStartPerf = performance.now() - fallbackPauseTime * 1000;
+    }
+
+    // 拖动进度条时实时更新时间显示，但不去动音频/计时器，避免拖动过程中产生大量跳转开销
+    seekSlider.addEventListener('input', () => {
+      if (totalDur <= 0) return;
+      isDraggingSeek = true;
+      const previewTime = (seekSlider.value / 1000) * totalDur;
+      updateTimeLabel(previewTime);
+    });
+
+    // 松手那一刻才真正执行跳转
+    seekSlider.addEventListener('change', () => {
+      if (totalDur <= 0) return;
+      const targetTime = (seekSlider.value / 1000) * totalDur;
+
+      if (hasRealAudio) {
+        audioEl.currentTime = targetTime;
+      } else {
+        fallbackPauseTime = targetTime;
+        if (playing) {
+          fallbackStartPerf = performance.now() - targetTime * 1000;
+        }
+      }
+
+      updateLyric(targetTime);
+      updateTimeLabel(targetTime);
+      isDraggingSeek = false;
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') searchBtn.click();
+    });
+  })();
+  </script>
+</body>
+</html>
